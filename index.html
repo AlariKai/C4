@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clacnez — Best Accounting Software for SMBs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],display:['Plus Jakarta Sans','sans-serif']},colors:{surface:{50:'#f8f9fd',100:'#f1f3f9',200:'#e8ebf4',300:'#d5d9e8'}}}}}
+  </script>
+  <style>
+    *{scroll-behavior:smooth;margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#f8f9fd;color:#374151;overflow-x:hidden}
+    .font-display{font-family:'Plus Jakarta Sans',sans-serif}
+
+    /* ===== SPLASH SCREEN ===== */
+    #splash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(160deg,#0f0e1a 0%,#1a1840 30%,#2d2a6e 60%,#1a1840 100%);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
+    #splash.hide{opacity:0;transform:scale(1.05);pointer-events:none}
+    #splash .logo-ring{width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,#6366f1,#a78bfa);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(99,102,241,0);animation:splashPulse 1.8s ease-in-out infinite,splashIn .8s cubic-bezier(.16,1,.3,1) forwards;opacity:0;transform:scale(.6)}
+    #splash .logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:2rem;letter-spacing:-.03em;color:white;margin-top:24px;opacity:0;animation:splashFadeUp .6s .3s cubic-bezier(.16,1,.3,1) forwards}
+    #splash .logo-sub{font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.2em;text-transform:uppercase;margin-top:8px;opacity:0;animation:splashFadeUp .6s .5s cubic-bezier(.16,1,.3,1) forwards}
+    #splash .loader{width:40px;height:3px;background:rgba(255,255,255,.08);border-radius:4px;margin-top:32px;overflow:hidden;opacity:0;animation:splashFadeUp .6s .6s cubic-bezier(.16,1,.3,1) forwards}
+    #splash .loader-bar{width:0;height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:4px;animation:splashLoad 1.6s .7s ease-in-out forwards}
+    @keyframes splashIn{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
+    @keyframes splashPulse{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,.4)}50%{box-shadow:0 0 0 20px rgba(99,102,241,0)}}
+    @keyframes splashFadeUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+    @keyframes splashLoad{0%{width:0}100%{width:100%}}
+    /* Splash particles */
+    .splash-particle{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(139,92,246,.5);animation:splashFloat 3s ease-in-out infinite}
+    @keyframes splashFloat{0%,100%{transform:translateY(0) scale(1);opacity:.3}50%{transform:translateY(-30px) scale(1.5);opacity:.7}}
+
+    /* ===== SCROLL PROGRESS ===== */
+    #scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#6366f1,#a78bfa,#6366f1);z-index:200;width:0;transition:none;box-shadow:0 0 10px rgba(99,102,241,.4)}
+
+    /* ===== CURSOR FOLLOWER ===== */
+    #cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(99,102,241,.04) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .3s;opacity:0}
+    body:hover #cursor-glow{opacity:1}
+
+    /* ===== SKY CANVAS ===== */
+    #sky-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+    .gradient-text-1{background:linear-gradient(135deg,#1e293b 0%,#475569 50%,#6366f1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .gradient-text-2{background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gs 4s ease infinite}
+    @keyframes gs{0%,100%{background-position:0% center}50%{background-position:200% center}}
+    @keyframes fadeUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    @keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes tiltIn{0%{opacity:0;transform:perspective(800px) rotateX(8deg) rotateY(-4deg) translateY(30px) scale(.96)}100%{opacity:1;transform:perspective(800px) rotateX(0) rotateY(0) translateY(0) scale(1)}}
+
+    .animate-fade-up{animation:fadeUp .9s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
+    .animate-fade-in{animation:fadeIn .7s ease forwards;opacity:0}
+    .animate-float{animation:float 6s ease-in-out infinite}
+    .animate-float-slow{animation:floatSlow 8s ease-in-out infinite}
+    .delay-100{animation-delay:100ms}.delay-200{animation-delay:200ms}.delay-300{animation-delay:300ms}.delay-400{animation-delay:400ms}.delay-500{animation-delay:500ms}.delay-600{animation-delay:600ms}.delay-1000{animation-delay:1000ms}
+
+    .sr{opacity:0;transform:translateY(40px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr.visible{opacity:1;transform:translateY(0)}
+    .sr-left{opacity:0;transform:translateX(-50px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-left.visible{opacity:1;transform:translateX(0)}
+    .sr-right{opacity:0;transform:translateX(50px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-right.visible{opacity:1;transform:translateX(0)}
+    .sr-scale{opacity:0;transform:scale(.85);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-scale.visible{opacity:1;transform:scale(1)}
+    .sr-tilt{opacity:0;transform:perspective(800px) rotateX(8deg) rotateY(-4deg) translateY(30px) scale(.96);transition:all 1s cubic-bezier(.16,1,.3,1)}.sr-tilt.visible{opacity:1;transform:perspective(800px) rotateX(0) rotateY(0) translateY(0) scale(1)}
+
+    /* 3D Tilt cards */
+    .tilt-card{transition:transform .15s ease-out,box-shadow .3s ease;transform-style:preserve-3d}
+
+    .icon-box{position:relative;border-radius:20px;display:flex;align-items:center;justify-content:center;transition:all .5s cubic-bezier(.16,1,.3,1);overflow:hidden;background:white;border:1.5px solid var(--icon-border);box-shadow:0 2px 8px -2px var(--icon-shadow)}
+    .icon-box iconify-icon{position:relative;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.06))}
+    .icon-box:hover{transform:scale(1.08) rotate(-2deg);border-color:var(--icon-to);box-shadow:0 8px 30px -5px var(--icon-shadow);background:linear-gradient(135deg,var(--icon-from),var(--icon-to))}
+    .icon-box:hover iconify-icon{color:white!important;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+    .icon-box-lg{width:80px;height:80px;border-radius:22px}
+    .icon-box-lg iconify-icon{font-size:36px}
+    .icon-box-sm{width:52px;height:52px;border-radius:15px}
+    .icon-box-sm iconify-icon{font-size:22px;color:white;filter:drop-shadow(0 1px 3px rgba(0,0,0,.15))}
+    .icon-box-sm{background:linear-gradient(135deg,var(--icon-from),var(--icon-to));border:none;box-shadow:0 4px 15px -3px var(--icon-shadow)}
+
+    .bento-card{background:white;border:1px solid #e8ebf4;border-radius:24px;transition:all .5s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.02)}
+    .bento-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.2),transparent);opacity:0;transition:opacity .5s}
+    .bento-card:hover::before{opacity:1}
+    .bento-card:hover{border-color:rgba(99,102,241,.15);box-shadow:0 20px 60px -15px rgba(99,102,241,.12),0 8px 20px -8px rgba(0,0,0,.04)}
+
+    .btn-primary{background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;position:relative;transition:all .4s cubic-bezier(.16,1,.3,1);overflow:hidden;box-shadow:0 4px 15px -3px rgba(99,102,241,.4)}
+    .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .3s}
+    .btn-primary:hover::after{opacity:1}
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 35px -5px rgba(99,102,241,.5)}
+
+    .btn-secondary{border:1.5px solid #d5d9e8;color:#4338ca;background:white;transition:all .4s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .btn-secondary:hover{border-color:#a5b4fc;background:#eef2ff;transform:translateY(-2px);box-shadow:0 6px 20px -4px rgba(99,102,241,.15)}
+
+    .btn-dark{background:#1e1b4b;color:white;transition:all .4s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 15px -3px rgba(30,27,75,.3)}
+    .btn-dark:hover{transform:translateY(-3px);box-shadow:0 12px 35px -5px rgba(30,27,75,.4)}
+
+    .nav-blur{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+    .nav-link{position:relative}
+    .nav-link::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:linear-gradient(90deg,#6366f1,#a78bfa);transition:all .3s cubic-bezier(.16,1,.3,1);transform:translateX(-50%);border-radius:1px}
+    .nav-link:hover::after{width:100%}
+    .mobile-menu{transform:translateY(-110%);transition:transform .5s cubic-bezier(.16,1,.3,1)}.mobile-menu.open{transform:translateY(0)}
+    .dashboard-glow{box-shadow:0 25px 80px -20px rgba(99,102,241,.15),0 15px 40px -10px rgba(0,0,0,.08)}
+
+    .stat-item{position:relative}
+    .stat-item::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:40px;background:linear-gradient(to bottom,transparent,#e0e4ee,transparent)}
+    .stat-item:last-child::after{display:none}
+
+    .pricing-card{position:relative;border-radius:28px;overflow:hidden}
+    .pricing-card::before{content:'';position:absolute;inset:0;padding:2px;border-radius:28px;background:linear-gradient(135deg,#6366f1,#a78bfa,#8b5cf6,#6366f1);background-size:300% 300%;animation:gs 5s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+    .pricing-inner{background:white;border-radius:27px}
+
+    .marquee-track{animation:marquee 30s linear infinite}.marquee-track:hover{animation-play-state:paused}
+    .toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:12px}
+    .toast-msg{transform:translateX(120%);opacity:0;transition:all .5s cubic-bezier(.16,1,.3,1)}.toast-msg.show{transform:translateX(0);opacity:1}
+
+    nav,main,footer,section{position:relative;z-index:2}
+    @media(max-width:768px){.stat-item::after{display:none}#cursor-glow{display:none}}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f1f3f9}::-webkit-scrollbar-thumb{background:rgba(99,102,241,.25);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(99,102,241,.4)}
+  </style>
+</head>
+<body>
+
+<!-- ===== SPLASH SCREEN ===== -->
+<div id="splash">
+  <div class="splash-particle" style="top:20%;left:25%;animation-delay:0s"></div>
+  <div class="splash-particle" style="top:70%;left:15%;animation-delay:.5s"></div>
+  <div class="splash-particle" style="top:30%;left:75%;animation-delay:1s"></div>
+  <div class="splash-particle" style="top:80%;left:80%;animation-delay:1.5s"></div>
+  <div class="splash-particle" style="top:50%;left:50%;animation-delay:.3s;width:2px;height:2px"></div>
+  <div class="splash-particle" style="top:15%;left:60%;animation-delay:.8s;width:2px;height:2px"></div>
+  <div class="splash-particle" style="top:85%;left:40%;animation-delay:1.2s;width:4px;height:4px;background:rgba(99,102,241,.3)"></div>
+  <div class="splash-particle" style="top:40%;left:10%;animation-delay:2s;width:4px;height:4px;background:rgba(99,102,241,.3)"></div>
+  <div class="logo-ring">
+    <iconify-icon icon="solar:calculator-bold" style="font-size:42px;color:white;filter:drop-shadow(0 2px 8px rgba(99,102,241,.4))"></iconify-icon>
+  </div>
+  <div class="logo-text">Clacnez</div>
+  <div class="logo-sub">Accounting Reimagined</div>
+  <div class="loader"><div class="loader-bar"></div></div>
+</div>
+
+<!-- ===== SCROLL PROGRESS ===== -->
+<div id="scroll-progress"></div>
+
+<!-- ===== CURSOR GLOW ===== -->
+<div id="cursor-glow"></div>
+
+<!-- ===== SKY CANVAS ===== -->
+<canvas id="sky-canvas"></canvas>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Nav -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-[100] nav-blur bg-white/60 border-b border-surface-200/50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-[72px]">
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 group-hover:scale-105 transition-all duration-500">
+          <iconify-icon icon="solar:calculator-bold" class="text-white text-xl"></iconify-icon>
+        </div>
+        <span class="font-display font-800 text-xl tracking-tight text-gray-900">Clacnez</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="nav-link text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a>
+        <a href="#pricing" class="nav-link text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Pricing</a>
+        <a href="#cta" class="nav-link text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a>
+      </div>
+      <div class="hidden md:flex items-center gap-3">
+        <button onclick="showToast('Sign in page coming soon!','info')" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">Sign In</button>
+        <button onclick="showToast('Registration opening soon!','success')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold relative z-10">Register</button>
+      </div>
+      <button class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-surface-100" onclick="toggleMenu()">
+        <iconify-icon id="menu-icon" icon="solar:hamburger-menu-linear" class="text-xl text-gray-600"></iconify-icon>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="mobile-menu md:hidden absolute top-full left-0 right-0 bg-white/95 nav-blur border-t border-surface-200 shadow-xl shadow-gray-200/40">
+    <div class="px-6 py-6 flex flex-col gap-1">
+      <a href="#features" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">About</a>
+      <a href="#pricing" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Pricing</a>
+      <a href="#cta" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Contact</a>
+      <hr class="my-3 border-surface-200">
+      <button onclick="showToast('Sign in coming soon!','info');toggleMenu();" class="py-3 px-4 rounded-xl text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-left">Sign In</button>
+      <button onclick="showToast('Registration opening soon!','success');toggleMenu();" class="btn-primary py-3 px-4 rounded-xl text-sm font-semibold text-center mt-1 relative z-10">Register</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="relative min-h-screen flex items-center pt-24 pb-16 lg:pt-0 lg:pb-0 overflow-hidden" style="background:linear-gradient(180deg,rgba(248,249,253,.08) 0%,rgba(248,249,253,.35) 35%,rgba(248,249,253,.85) 65%,rgba(248,249,253,1) 90%)">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div class="max-w-xl">
+        <div class="hero-anim" style="opacity:0;transform:translateY(40px)">
+          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/80 border border-surface-200 shadow-sm backdrop-blur-sm mb-8">
+            <span class="relative flex h-2 w-2"><span class="absolute inset-0 rounded-full bg-indigo-400 animate-ping"></span><span class="relative rounded-full h-2 w-2 bg-indigo-500"></span></span>
+            <span class="text-xs font-semibold text-gray-500 tracking-wide">TRUSTED BY 2,000+ BUSINESSES GLOBALLY</span>
+          </div>
+        </div>
+        <h1 class="hero-anim font-display font-900 text-[2.6rem] sm:text-5xl lg:text-[3.5rem] leading-[1.08] tracking-tight mb-6" style="opacity:0;transform:translateY(40px)">
+          <span class="gradient-text-1">Best Accounting Software For</span><br>
+          <span class="gradient-text-2">Small & Medium Business</span>
+        </h1>
+        <p class="hero-anim text-base lg:text-lg text-gray-600 leading-relaxed mb-10 max-w-lg" style="opacity:0;transform:translateY(40px)">
+          Streamline your financial operations with user-friendly tools, real-time insights, tax report generation, multi-currency support and more — all at unbeatable value.
+        </p>
+        <div class="hero-anim flex flex-wrap gap-4 mb-8" style="opacity:0;transform:translateY(40px)">
+          <button onclick="showToast('Free trial activated! Check your email.','success')" class="btn-primary px-8 py-4 rounded-2xl text-sm font-bold tracking-wide relative z-10">
+            <span class="relative z-10 flex items-center gap-2.5">Start Free Trial <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon></span>
+          </button>
+          <a href="#pricing" class="btn-secondary px-8 py-4 rounded-2xl text-sm font-bold tracking-wide flex items-center gap-2.5">
+            <iconify-icon icon="solar:play-circle-bold" class="text-lg text-indigo-500"></iconify-icon>View Pricing
+          </a>
+        </div>
+        <div class="hero-anim flex items-center gap-6" style="opacity:0;transform:translateY(40px)">
+          <div class="flex -space-x-2.5">
+            <img src="https://picsum.photos/seed/facea/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
+            <img src="https://picsum.photos/seed/faceb/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
+            <img src="https://picsum.photos/seed/facec/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
+            <img src="https://picsum.photos/seed/faced/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-indigo-50 flex items-center justify-center shadow-sm"><span class="text-[9px] font-bold text-indigo-600">+2K</span></div>
+          </div>
+          <div>
+            <div class="flex gap-0.5 mb-0.5"><iconify-icon icon="solar:star-bold" class="text-amber-400 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-amber-400 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-amber-400 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-amber-400 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-amber-400 text-xs"></iconify-icon></div>
+            <p class="text-[11px] text-gray-500 font-medium">No Credit Card &bull; 30 Days Free</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-anim relative" style="opacity:0;transform:perspective(800px) rotateX(8deg) rotateY(-4deg) translateY(30px) scale(.96);perspective:1200px">
+        <div id="dash-card" class="dashboard-glow rounded-2xl overflow-hidden bg-white border border-surface-200 animate-float-slow relative z-10 tilt-card">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-surface-100 bg-surface-50">
+            <div class="w-[10px] h-[10px] rounded-full bg-red-400"></div>
+            <div class="w-[10px] h-[10px] rounded-full bg-amber-400"></div>
+            <div class="w-[10px] h-[10px] rounded-full bg-emerald-400"></div>
+            <div class="ml-3 flex-1 h-6 bg-white rounded-lg flex items-center px-3 border border-surface-200">
+              <iconify-icon icon="solar:lock-linear" class="text-gray-400 text-[10px] mr-1.5"></iconify-icon>
+              <span class="text-[10px] text-gray-400 font-mono">app.clacnez.com/dashboard</span>
+            </div>
+          </div>
+          <div class="p-4 lg:p-5">
+            <div class="grid grid-cols-3 gap-2.5 mb-4">
+              <div class="bg-surface-50 rounded-xl p-3 border border-surface-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Revenue</p><p class="text-sm font-bold text-gray-900 font-display">$124.5K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-emerald-500 text-[9px]"></iconify-icon><span class="text-[9px] text-emerald-600 font-semibold">12.5%</span></div></div>
+              <div class="bg-surface-50 rounded-xl p-3 border border-surface-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Expenses</p><p class="text-sm font-bold text-gray-900 font-display">$43.2K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-red-400 text-[9px]"></iconify-icon><span class="text-[9px] text-red-500 font-semibold">3.2%</span></div></div>
+              <div class="bg-surface-50 rounded-xl p-3 border border-surface-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Net Profit</p><p class="text-sm font-bold text-indigo-600 font-display">$81.2K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-emerald-500 text-[9px]"></iconify-icon><span class="text-[9px] text-emerald-600 font-semibold">18.7%</span></div></div>
+            </div>
+            <div class="bg-surface-50 rounded-xl p-4 border border-surface-100 mb-4">
+              <div class="flex items-center justify-between mb-4"><p class="text-[11px] font-semibold text-gray-700">Revenue Overview</p><div class="flex gap-1"><span class="text-[9px] px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-600 font-semibold border border-indigo-100">Monthly</span><span class="text-[9px] px-2.5 py-1 rounded-lg text-gray-400 font-medium">Yearly</span></div></div>
+              <svg viewBox="0 0 400 100" class="w-full"><defs><linearGradient id="cg1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.15"/><stop offset="100%" style="stop-color:#6366f1;stop-opacity:0"/></linearGradient><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#6366f1"/><stop offset="50%" style="stop-color:#8b5cf6"/><stop offset="100%" style="stop-color:#a78bfa"/></linearGradient></defs><path d="M0,75 Q50,70 100,60 T200,45 T300,30 T400,15 L400,100 L0,100 Z" fill="url(#cg1)"/><path d="M0,75 Q50,70 100,60 T200,45 T300,30 T400,15" fill="none" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round"/><circle cx="400" cy="15" r="4" fill="#6366f1"/><circle cx="400" cy="15" r="8" fill="#6366f1" opacity="0.15"/><text x="0" y="96" fill="#9ca3af" font-size="8" font-family="Inter">Jan</text><text x="65" y="96" fill="#9ca3af" font-size="8" font-family="Inter">Mar</text><text x="140" y="96" fill="#9ca3af" font-size="8" font-family="Inter">May</text><text x="215" y="96" fill="#9ca3af" font-size="8" font-family="Inter">Jul</text><text x="290" y="96" fill="#9ca3af" font-size="8" font-family="Inter">Sep</text><text x="370" y="96" fill="#9ca3af" font-size="8" font-family="Inter">Nov</text></svg>
+            </div>
+            <div class="grid grid-cols-5 gap-2.5">
+              <div class="col-span-3 bg-surface-50 rounded-xl p-3 border border-surface-100">
+                <p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-2.5">Recent</p>
+                <div class="space-y-2.5">
+                  <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-down-linear" class="text-emerald-500 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Payment received</p><p class="text-[8px] text-gray-400">2 min ago</p></div><span class="text-[10px] font-bold text-emerald-600">+$2,400</span></div>
+                  <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-up-linear" class="text-red-400 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Cloud hosting</p><p class="text-[8px] text-gray-400">1 hour ago</p></div><span class="text-[10px] font-bold text-red-500">-$350</span></div>
+                  <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-down-linear" class="text-emerald-500 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Invoice #1042</p><p class="text-[8px] text-gray-400">3 hours ago</p></div><span class="text-[10px] font-bold text-emerald-600">+$8,750</span></div>
+                </div>
+              </div>
+              <div class="col-span-2 bg-surface-50 rounded-xl p-3 border border-surface-100">
+                <p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-3">Breakdown</p>
+                <div class="flex items-center justify-center mb-3"><svg viewBox="0 0 80 80" class="w-16 h-16"><circle cx="40" cy="40" r="30" fill="none" stroke="#f1f3f9" stroke-width="7"/><circle cx="40" cy="40" r="30" fill="none" stroke="#6366f1" stroke-width="7" stroke-dasharray="65 124" stroke-dashoffset="0" transform="rotate(-90 40 40)" stroke-linecap="round"/><circle cx="40" cy="40" r="30" fill="none" stroke="#8b5cf6" stroke-width="7" stroke-dasharray="38 151" stroke-dashoffset="-65" transform="rotate(-90 40 40)" stroke-linecap="round"/><circle cx="40" cy="40" r="30" fill="none" stroke="#c4b5fd" stroke-width="7" stroke-dasharray="20 169" stroke-dashoffset="-103" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg></div>
+                <div class="space-y-1.5"><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Ops 52%</span><span class="text-[8px] text-gray-400">$22.5K</span></div><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>Salary 31%</span><span class="text-[8px] text-gray-400">$13.4K</span></div><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-purple-300"></span>Other 17%</span><span class="text-[8px] text-gray-400">$7.3K</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="absolute -left-6 lg:-left-10 top-[30%] z-20 animate-float" style="animation-delay:1.5s">
+          <div class="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl shadow-indigo-500/10 border border-surface-100">
+            <div class="flex items-center gap-2.5"><div class="icon-box-sm" style="--icon-from:#10b981;--icon-to:#059669;--icon-shadow:rgba(16,185,129,.3)"><iconify-icon icon="solar:check-circle-bold"></iconify-icon></div><div><p class="text-[11px] font-bold text-gray-900">Tax Filed!</p><p class="text-[9px] text-gray-500">GST Q4 2024</p></div></div>
+          </div>
+        </div>
+        <div class="absolute -right-4 lg:-right-8 bottom-[25%] z-20 animate-float hidden lg:flex" style="animation-delay:3s">
+          <div class="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl shadow-purple-500/10 border border-surface-100">
+            <div class="flex items-center gap-2.5"><div class="icon-box-sm" style="--icon-from:#8b5cf6;--icon-to:#7c3aed;--icon-shadow:rgba(139,92,246,.3)"><iconify-icon icon="solar:magic-stick-3-bold"></iconify-icon></div><div><p class="text-[11px] font-bold text-gray-900">AI Insight</p><p class="text-[9px] text-gray-500">Save $4.2K next mo</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<section class="py-12 border-y border-surface-200 bg-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-6"><p class="text-center text-[11px] text-gray-400 font-semibold uppercase tracking-[.2em]">Trusted by forward-thinking companies</p></div>
+  <div class="relative overflow-hidden"><div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div><div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
+  <div class="marquee-track flex items-center gap-16 whitespace-nowrap" style="width:max-content">
+    <span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:stripe" class="text-2xl"></iconify-icon> Stripe</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:shopify" class="text-2xl"></iconify-icon> Shopify</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:notion" class="text-2xl"></iconify-icon> Notion</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:figma" class="text-2xl"></iconify-icon> Figma</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:slack" class="text-2xl"></iconify-icon> Slack</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:linear" class="text-2xl"></iconify-icon> Linear</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:vercel" class="text-2xl"></iconify-icon> Vercel</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:intercom" class="text-2xl"></iconify-icon> Intercom</span>
+    <span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:stripe" class="text-2xl"></iconify-icon> Stripe</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:shopify" class="text-2xl"></iconify-icon> Shopify</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:notion" class="text-2xl"></iconify-icon> Notion</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:figma" class="text-2xl"></iconify-icon> Figma</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:slack" class="text-2xl"></iconify-icon> Slack</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:linear" class="text-2xl"></iconify-icon> Linear</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:vercel" class="text-2xl"></iconify-icon> Vercel</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:intercom" class="text-2xl"></iconify-icon> Intercom</span>
+  </div></div>
+</section>
+
+<!-- Stats -->
+<section class="py-16 bg-white relative">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="sr grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
+      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="2000">0</p><p class="text-sm text-gray-500 font-medium">Active Businesses</p></div>
+      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="99.9" data-suffix="%" data-decimal="1">0</p><p class="text-sm text-gray-500 font-medium">Uptime Guarantee</p></div>
+      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="50" data-suffix="+">0</p><p class="text-sm text-gray-500 font-medium">Currencies Supported</p></div>
+      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="4.9" data-suffix="/5" data-decimal="1">0</p><p class="text-sm text-gray-500 font-medium">Customer Rating</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-24 lg:py-32 bg-surface-50 relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="sr text-center mb-16 lg:mb-20">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-surface-200 shadow-sm mb-6"><iconify-icon icon="solar:widget-2-bold" class="text-indigo-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Features</span></div>
+      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">What Clacnez</span><span class="gradient-text-2"> Offers to You!</span></h2>
+      <p class="text-gray-600 text-base lg:text-lg max-w-2xl mx-auto">Everything you need to manage your business finances efficiently and make smarter decisions.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="sr-tilt bento-card tilt-card md:col-span-2 lg:col-span-2 p-8 lg:p-10" style="transition-delay:100ms">
+        <div class="flex flex-col lg:flex-row gap-8 items-start"><div class="flex-1">
+          <div class="icon-box icon-box-lg mb-6" style="--icon-from:#6366f1;--icon-to:#4f46e5;--icon-border:#e0e7ff;--icon-shadow:rgba(99,102,241,.2)"><iconify-icon icon="solar:global-bold-duotone" style="font-size:36px;color:#6366f1"></iconify-icon></div>
+          <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Multi Currency</h3>
+          <p class="text-[15px] text-gray-600 leading-relaxed max-w-md mb-5">Accept payments and manage accounts in over 50 currencies with real-time exchange rate conversion. No more manual calculations or costly conversion fees eating into your margins.</p>
+          <div class="flex flex-wrap gap-2"><span class="text-[10px] px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 font-semibold">USD</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-purple-50 border border-purple-100 text-purple-600 font-semibold">EUR</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 font-semibold">SGD</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-100 text-amber-600 font-semibold">GBP</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 font-semibold">+46 more</span></div>
+        </div><div class="w-full lg:w-64 h-40 rounded-xl bg-surface-50 border border-surface-200 overflow-hidden relative flex-shrink-0"><div class="absolute inset-0 flex items-center justify-center"><div class="text-center"><p class="text-[10px] text-gray-500 font-medium mb-3">Live Exchange</p><div class="space-y-2"><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">USD/SGD</span><span class="text-[10px] font-mono text-emerald-600 font-semibold">1.3421</span></div><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">EUR/SGD</span><span class="text-[10px] font-mono text-emerald-600 font-semibold">1.4618</span></div><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">GBP/SGD</span><span class="text-[10px] font-mono text-red-500 font-semibold">1.7023</span></div></div></div></div><svg class="absolute bottom-0 left-0 right-0 h-12 opacity-20" viewBox="0 0 256 48" preserveAspectRatio="none"><path d="M0,30 Q32,25 64,28 T128,20 T192,24 T256,12 L256,48 L0,48 Z" fill="url(#cg1)"/><path d="M0,30 Q32,25 64,28 T128,20 T192,24 T256,12" fill="none" stroke="#6366f1" stroke-width="1"/></svg></div></div>
+      </div>
+      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:200ms">
+        <div class="icon-box icon-box-lg mb-6" style="--icon-from:#8b5cf6;--icon-to:#7c3aed;--icon-border:#ede9fe;--icon-shadow:rgba(139,92,246,.2)"><iconify-icon icon="solar:magic-stick-3-bold-duotone" style="font-size:36px;color:#8b5cf6"></iconify-icon></div>
+        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">AI Assistant</h3>
+        <p class="text-[15px] text-gray-600 leading-relaxed mb-5">Get intelligent recommendations, anomaly detection, and automated categorization powered by advanced AI.</p>
+        <div class="space-y-2.5"><div class="bg-surface-50 rounded-xl rounded-tl-sm px-3 py-2.5 border border-surface-200"><p class="text-[11px] text-gray-600">Analyze my Q4 spending patterns</p></div><div class="bg-indigo-50 rounded-xl rounded-tr-sm px-3 py-2.5 border border-indigo-100 ml-4"><p class="text-[11px] text-indigo-700 font-medium">Ops costs rose 12% — found $4.2K in savings 🎯</p></div></div>
+      </div>
+      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:300ms">
+        <div class="icon-box icon-box-lg mb-6" style="--icon-from:#3b82f6;--icon-to:#2563eb;--icon-border:#dbeafe;--icon-shadow:rgba(59,130,246,.2)"><iconify-icon icon="solar:chart-2-bold-duotone" style="font-size:36px;color:#3b82f6"></iconify-icon></div>
+        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Real-time Analytics</h3>
+        <p class="text-[15px] text-gray-600 leading-relaxed">Monitor cash flow, profit margins, and key performance metrics with interactive dashboards that update in real-time. Spot trends before they become problems.</p>
+      </div>
+      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:400ms">
+        <div class="icon-box icon-box-lg mb-6" style="--icon-from:#10b981;--icon-to:#059669;--icon-border:#d1fae5;--icon-shadow:rgba(16,185,129,.2)"><iconify-icon icon="solar:wallet-money-bold-duotone" style="font-size:36px;color:#10b981"></iconify-icon></div>
+        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Expense Tracking</h3>
+        <p class="text-[15px] text-gray-600 leading-relaxed">Snap receipts with your phone, auto-categorize expenses, and set smart budget limits to keep your spending under control effortlessly.</p>
+      </div>
+      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:500ms">
+        <div class="icon-box icon-box-lg mb-6" style="--icon-from:#f59e0b;--icon-to:#d97706;--icon-border:#fef3c7;--icon-shadow:rgba(245,158,11,.2)"><iconify-icon icon="solar:document-text-bold-duotone" style="font-size:36px;color:#f59e0b"></iconify-icon></div>
+        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Automated Reporting</h3>
+        <p class="text-[15px] text-gray-600 leading-relaxed">Generate P&L statements, balance sheets, and cash flow reports automatically on any schedule. Share with stakeholders in one click.</p>
+      </div>
+      <div class="sr-tilt bento-card tilt-card md:col-span-2 lg:col-span-1 p-8" style="transition-delay:600ms">
+        <div class="icon-box icon-box-lg mb-6" style="--icon-from:#f43f5e;--icon-to:#e11d48;--icon-border:#ffe4e6;--icon-shadow:rgba(244,63,94,.2)"><iconify-icon icon="solar:clipboard-check-bold-duotone" style="font-size:36px;color:#f43f5e"></iconify-icon></div>
+        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Tax Filing</h3>
+        <p class="text-[15px] text-gray-600 leading-relaxed">Auto-calculate GST, generate IRAS-compliant tax reports, and file directly to tax authorities. Never miss a deadline again.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-24 lg:py-32 bg-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="sr text-center mb-16 lg:mb-20">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-50 border border-surface-200 shadow-sm mb-6"><iconify-icon icon="solar:medal-star-bold" class="text-indigo-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Why Clacnez</span></div>
+      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">Why Choose</span><span class="gradient-text-2"> Clacnez?</span></h2>
+      <p class="text-gray-600 text-base lg:text-lg max-w-2xl mx-auto">We built Clacnez to be the most intuitive and affordable accounting solution on the market.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      <div class="sr-left" style="transition-delay:200ms">
+        <div class="bento-card p-10 lg:p-12 group h-full tilt-card">
+          <div class="absolute top-0 right-0 w-48 h-48 bg-indigo-50 rounded-full blur-3xl pointer-events:none"></div>
+          <div class="relative z-10">
+            <div class="icon-box icon-box-lg mb-8" style="--icon-from:#6366f1;--icon-to:#4f46e5;--icon-border:#e0e7ff;--icon-shadow:rgba(99,102,241,.2)"><iconify-icon icon="solar:hand-heart-bold-duotone" style="font-size:36px;color:#6366f1"></iconify-icon></div>
+            <h3 class="font-display font-900 text-2xl lg:text-3xl text-gray-900 mb-4">Super User Friendly</h3>
+            <p class="text-[15px] text-gray-600 leading-relaxed mb-8">No accounting degree required. Our interface was designed for business owners, not accountants. Get set up and running in under 5 minutes.</p>
+            <div class="space-y-3.5">
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-indigo-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Intuitive from day one — no training needed</span></div>
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-indigo-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Drag & drop receipt scanning</span></div>
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-indigo-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Works beautifully on mobile & desktop</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sr-right" style="transition-delay:400ms">
+        <div class="bento-card p-10 lg:p-12 group h-full tilt-card">
+          <div class="absolute top-0 right-0 w-48 h-48 bg-emerald-50 rounded-full blur-3xl pointer-events:none"></div>
+          <div class="relative z-10">
+            <div class="icon-box icon-box-lg mb-8" style="--icon-from:#10b981;--icon-to:#059669;--icon-border:#d1fae5;--icon-shadow:rgba(16,185,129,.2)"><iconify-icon icon="solar:tag-price-bold-duotone" style="font-size:36px;color:#10b981"></iconify-icon></div>
+            <h3 class="font-display font-900 text-2xl lg:text-3xl text-gray-900 mb-4">Unbeatable Price</h3>
+            <p class="text-[15px] text-gray-600 leading-relaxed mb-8">Just SGD 19/month for absolutely everything. No tiered pricing mind games, no per-user fees, no hidden charges.</p>
+            <div class="space-y-3.5">
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">No hidden fees — transparent pricing</span></div>
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Unlimited users included for free</span></div>
+              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">80% cheaper than leading competitors</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing" class="py-24 lg:py-32 bg-surface-50 relative overflow-hidden">
+  <div class="absolute inset-0"><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-100/40 rounded-full blur-[100px] pointer-events:none"></div></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="sr text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-surface-200 shadow-sm mb-6"><iconify-icon icon="solar:tag-price-bold" class="text-indigo-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Pricing</span></div>
+      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">Simplify Your Accounting</span><br><span class="gradient-text-2">with Clacnez</span></h2>
+      <p class="text-gray-600 text-base lg:text-lg max-w-2xl mx-auto">One plan, everything you need. No hidden fees, no surprises.</p>
+    </div>
+    <div class="sr-scale max-w-lg mx-auto" style="transition-delay:200ms">
+      <div class="pricing-card"><div class="pricing-inner p-8 lg:p-10 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[.03]" style="background:linear-gradient(90deg,transparent,rgba(99,102,241,.8),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-8"><div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100"><iconify-icon icon="solar:star-bold" class="text-indigo-500 text-xs"></iconify-icon><span class="text-[10px] font-bold text-indigo-600 tracking-wide uppercase">Most Popular</span></div><span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">SAVE 17%</span></div>
+          <div class="mb-8"><div class="flex items-baseline gap-2 mb-2"><span class="text-5xl lg:text-6xl font-display font-900 text-gray-900">SGD 19</span><span class="text-lg text-gray-400 font-medium">/month</span></div><p class="text-sm text-gray-500">Billed annually. <span class="line-through text-gray-300">SGD 23/month</span> monthly.</p></div>
+          <div class="space-y-4 mb-10">
+            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-indigo-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Unlimited invoices & bills</span></div>
+            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-indigo-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Multi-currency support (50+ currencies)</span></div>
+            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-indigo-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">AI-powered insights & smart assistant</span></div>
+            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-indigo-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Automated GST & tax filing to IRAS</span></div>
+            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-indigo-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-indigo-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Unlimited users & priority customer support</span></div>
+          </div>
+          <button onclick="showToast('Redirecting to registration...','success')" class="w-full btn-primary py-4 rounded-2xl text-sm font-bold tracking-wide relative z-10 mb-4"><span class="relative z-10">Get Started — 30 Days Free</span></button>
+          <p class="text-center text-[11px] text-gray-400">No credit card required • Cancel anytime</p>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section id="cta" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="sr text-center">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-50 rounded-full blur-[80px] pointer-events:none"></div>
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-50 border border-surface-200 shadow-sm mb-8"><iconify-icon icon="solar:rocket-2-bold" class="text-indigo-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Get Started Today</span></div>
+        <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight text-gray-900 leading-tight mb-6">Ready to Transform Your<br><span class="gradient-text-2">Financial Management?</span></h2>
+        <p class="text-gray-600 text-base lg:text-lg mb-10 max-w-xl mx-auto leading-relaxed">Join thousands of leading businesses using Clacnez to streamline their finances and make smarter decisions.</p>
+        <button onclick="showToast('Redirecting to pricing...','success')" class="btn-dark px-10 py-4 rounded-2xl text-sm font-bold tracking-wide inline-flex items-center gap-3 mb-8">View Pricing Plans <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon></button>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
+          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-sm"></iconify-icon> Free 30-day trial</span>
+          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-sm"></iconify-icon> No credit card</span>
+          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-indigo-500 text-sm"></iconify-icon> Cancel anytime</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 border-t border-gray-800 pt-16 pb-8 relative">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 lg:gap-16 pb-12 border-b border-gray-800">
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2.5 mb-5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center"><iconify-icon icon="solar:calculator-bold" class="text-white text-lg"></iconify-icon></div><span class="font-display font-800 text-xl tracking-tight text-white">Clacnez</span></div>
+        <p class="text-sm text-gray-400 leading-relaxed max-w-xs mb-5">User-friendly cloud-based accounting software for modern businesses.</p>
+        <div class="flex gap-2.5">
+          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:x" class="text-gray-400 text-sm group-hover:text-white transition-colors"></iconify-icon></a>
+          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:linkedin" class="text-gray-400 text-sm group-hover:text-white transition-colors"></iconify-icon></a>
+          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:instagram" class="text-gray-400 text-sm group-hover:text-white transition-colors"></iconify-icon></a>
+        </div>
+      </div>
+      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Product</h4><ul class="space-y-3"><li><a href="#features" class="text-sm text-gray-400 hover:text-white transition-colors">Features</a></li><li><a href="#pricing" class="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a></li></ul></div>
+      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Company</h4><ul class="space-y-3"><li><a href="#features" class="text-sm text-gray-400 hover:text-white transition-colors">About</a></li><li><a href="#cta" class="text-sm text-gray-400 hover:text-white transition-colors">Contact</a></li></ul></div>
+      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Legal</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li><li><a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">Terms & Conditions</a></li></ul></div>
+    </div>
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-gray-500">© 2025 Clacnez. All rights reserved.</p>
+      <p class="text-sm text-gray-600">Crafted with precision for modern businesses</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== SPLASH SCREEN =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    // Trigger hero staggered animations after splash
+    setTimeout(animateHero, 300);
+  }, 2400);
+});
+
+function animateHero() {
+  const els = document.querySelectorAll('.hero-anim');
+  els.forEach((el, i) => {
+    const isTilt = el.style.transform.includes('perspective');
+    el.style.transition = `all 1s cubic-bezier(.16,1,.3,1) ${i * 120}ms`;
+    requestAnimationFrame(() => {
+      el.style.opacity = '1';
+      el.style.transform = isTilt ? 'perspective(800px) rotateX(0) rotateY(0) translateY(0) scale(1)' : 'translateY(0)';
+    });
+  });
+}
+
+// ===== SCROLL PROGRESS =====
+const progressBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (window.scrollY / h * 100) + '%';
+}, { passive: true });
+
+// ===== CURSOR GLOW =====
+const cursorGlow = document.getElementById('cursor-glow');
+let cx = -999, cy = -999;
+document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; cursorGlow.style.left = cx + 'px'; cursorGlow.style.top = cy + 'px'; });
+
+// ===== 3D TILT ON CARDS =====
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale(1.02)`;
+    card.style.boxShadow = `${-x * 20}px ${y * 20}px 40px -10px rgba(99,102,241,.08), 0 1px 3px rgba(0,0,0,.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.boxShadow = '';
+  });
+});
+
+// ===== SKY SCENERY =====
+const canvas = document.getElementById('sky-canvas'), ctx = canvas.getContext('2d');
+let W, H, skyCache, sunCache;
+let clouds = [], motes = [];
+const mob = window.innerWidth < 768;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  buildSkyCache(); buildSunCache();
+}
+
+function buildSkyCache() {
+  const o = document.createElement('canvas'); o.width = W; o.height = H;
+  const c = o.getContext('2d');
+  const g = c.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#5b9fd4'); g.addColorStop(0.15, '#7ab3de');
+  g.addColorStop(0.35, '#a3cfe8'); g.addColorStop(0.55, '#c6dff0');
+  g.addColorStop(0.75, '#dce9f4'); g.addColorStop(0.88, '#eaf1f8');
+  g.addColorStop(1, '#f8f9fd');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  skyCache = o;
+}
+
+function buildSunCache() {
+  const o = document.createElement('canvas');
+  const s = Math.min(W, H) * .7; o.width = s; o.height = s;
+  const c = o.getContext('2d');
+  const cx = s * .65, cy = s * .2, r = s * .45;
+  const g = c.createRadialGradient(cx, cy, 0, cx, cy, r);
+  g.addColorStop(0, 'rgba(255,253,238,0.55)');
+  g.addColorStop(0.15, 'rgba(255,248,220,0.35)');
+  g.addColorStop(0.4, 'rgba(255,240,200,0.12)');
+  g.addColorStop(0.7, 'rgba(255,230,180,0.04)');
+  g.addColorStop(1, 'rgba(255,220,160,0)');
+  c.fillStyle = g; c.fillRect(0, 0, s, s);
+  const g2 = c.createRadialGradient(cx, cy, 0, cx, cy, s * .06);
+  g2.addColorStop(0, 'rgba(255,255,248,0.7)');
+  g2.addColorStop(1, 'rgba(255,255,248,0)');
+  c.fillStyle = g2; c.fillRect(0, 0, s, s);
+  sunCache = o;
+}
+
+function genPuffs(w, h, n) {
+  const p = [];
+  const bn = Math.floor(w / 28);
+  for (let i = 0; i < bn; i++) { const t = bn > 1 ? i / (bn - 1) : .5; p.push({ x: w * .08 + t * w * .84, y: h * .62 + (Math.random() - .5) * h * .08, r: Math.max(8, h * .32 + Math.random() * h * .12) }); }
+  const tn = 3 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < tn; i++) p.push({ x: w * .15 + Math.random() * w * .7, y: h * .28 + Math.random() * h * .18, r: Math.max(8, h * .28 + Math.random() * h * .22) });
+  for (let i = 0; i < n - bn - tn; i++) p.push({ x: w * .1 + Math.random() * w * .8, y: h * .3 + Math.random() * h * .3, r: Math.max(8, h * .2 + Math.random() * h * .15) });
+  return p;
+}
+
+class Cloud {
+  constructor(layer) {
+    this.layer = layer;
+    const sc = .4 + layer * .35;
+    const bw = (180 + Math.random() * 120) * sc, bh = (70 + Math.random() * 40) * sc;
+    const op = .25 + layer * .18;
+    this.x = Math.random() * W * 1.4 - W * .2;
+    this.y = Math.random() * H * .55 + H * .02;
+    this.speed = (.08 + layer * .06 + Math.random() * .04) * (mob ? .5 : 1);
+    this.canvas = this._r(bw, bh, op);
+    this.w = this.canvas.width; this.h = this.canvas.height;
+  }
+  _r(bw, bh, op) {
+    const pad = 30, o = document.createElement('canvas');
+    o.width = bw + pad * 2; o.height = bh + pad * 2;
+    const c = o.getContext('2d'), puffs = genPuffs(bw, bh, 14 + this.layer * 6);
+    for (const p of puffs) {
+      const r = Math.max(1, p.r);
+      const g = c.createRadialGradient(p.x + pad, p.y + pad, r * .05, p.x + pad, p.y + pad, r);
+      g.addColorStop(0, `rgba(255,255,255,${op})`);
+      g.addColorStop(.5, `rgba(255,255,255,${op * .6})`);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      c.beginPath(); c.arc(p.x + pad, p.y + pad, r, 0, Math.PI * 2);
+      c.fillStyle = g; c.fill();
+    }
+    return o;
+  }
+  update() { this.x += this.speed; if (this.x - this.w / 2 > W + 50) { this.x = -this.w / 2 - Math.random() * 200; this.y = Math.random() * H * .55 + H * .02; } }
+  draw() { ctx.drawImage(this.canvas, this.x - this.w / 2, this.y - this.h / 2); }
+}
+
+class Mote {
+  constructor() {
+    this.x = Math.random() * W; this.y = Math.random() * H * .7;
+    this.r = 1 + Math.random() * 2; this.vx = (Math.random() - .5) * .15; this.vy = (Math.random() - .5) * .1;
+    this.ba = .08 + Math.random() * .2; this.ph = Math.random() * Math.PI * 2; this.sp = .008 + Math.random() * .012;
+  }
+  update(t) { this.x += this.vx; this.y += this.vy; this.a = this.ba + Math.sin(t * this.sp + this.ph) * this.ba * .5; if (this.x < -20) this.x = W + 20; if (this.x > W + 20) this.x = -20; if (this.y < -20) this.y = H * .7 + 20; if (this.y > H * .7 + 20) this.y = -20; }
+  draw() {
+    const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3);
+    g.addColorStop(0, `rgba(255,250,230,${this.a})`); g.addColorStop(1, 'rgba(255,250,230,0)');
+    ctx.fillStyle = g; ctx.fillRect(this.x - this.r * 3, this.y - this.r * 3, this.r * 6, this.r * 6);
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,252,240,${this.a * 1.5})`; ctx.fill();
+  }
+}
+
+resize();
+const cn = mob ? [3, 2, 2] : [5, 4, 3];
+for (let l = 0; l < 3; l++) for (let i = 0; i < cn[l]; i++) clouds.push(new Cloud(l));
+clouds.sort((a, b) => a.layer - b.layer);
+for (let i = 0; i < (mob ? 12 : 25); i++) motes.push(new Mote());
+window.addEventListener('resize', () => { resize(); clouds = []; const c2 = mob ? [3, 2, 2] : [5, 4, 3]; for (let l = 0; l < 3; l++) for (let i = 0; i < c2[l]; i++) clouds.push(new Cloud(l)); clouds.sort((a, b) => a.layer - b.layer); motes = []; for (let i = 0; i < (mob ? 12 : 25); i++) motes.push(new Mote()); });
+
+let t = 0;
+function animateSky() {
+  t++; ctx.clearRect(0, 0, W, H);
+  if (skyCache) ctx.drawImage(skyCache, 0, 0);
+  if (sunCache) { const s = Math.min(W, H) * .7; ctx.drawImage(sunCache, W - s, 0, s, s); }
+  for (const c of clouds) { c.update(); c.draw(); }
+  for (const m of motes) { m.update(t); m.draw(); }
+  if (cx > 0) { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 120); g.addColorStop(0, 'rgba(255,250,230,0.04)'); g.addColorStop(1, 'rgba(255,250,230,0)'); ctx.fillStyle = g; ctx.fillRect(cx - 120, cy - 120, 240, 240); }
+  requestAnimationFrame(animateSky);
+}
+animateSky();
+
+// ===== UI =====
+let mo2 = false;
+function toggleMenu() { mo2 = !mo2; document.getElementById('mobile-menu').classList.toggle('open', mo2); document.getElementById('menu-icon').setAttribute('icon', mo2 ? 'solar:close-circle-linear' : 'solar:hamburger-menu-linear'); }
+
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => { if (window.scrollY > 20) { nav.classList.add('bg-white/85', 'shadow-sm'); nav.classList.remove('bg-white/60'); } else { nav.classList.remove('bg-white/85', 'shadow-sm'); nav.classList.add('bg-white/60'); } }, { passive: true });
+
+const io = new IntersectionObserver(e => { e.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } }); }, { threshold: .1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.sr,.sr-left,.sr-right,.sr-scale,.sr-tilt').forEach(el => io.observe(el));
+
+const cio = new IntersectionObserver(e => { e.forEach(en => { if (en.isIntersecting) { animC(); cio.unobserve(en.target); } }); }, { threshold: .3 });
+const fs = document.querySelector('[data-count]'); if (fs) cio.observe(fs.closest('.sr'));
+function animC() { document.querySelectorAll('[data-count]').forEach(el => { const tgt = parseFloat(el.dataset.count), s = el.dataset.suffix || '', d = parseInt(el.dataset.decimal) || 0, dur = 2000, st = performance.now(); function u(n) { const p = Math.min((n - st) / dur, 1), e2 = 1 - Math.pow(1 - p, 4), c = tgt * e2; el.textContent = (d > 0 ? c.toFixed(d) : Math.floor(c).toLocaleString()) + s; if (p < 1) requestAnimationFrame(u); } requestAnimationFrame(u); }); }
+
+function showToast(m, t = 'info') {
+  const c = document.getElementById('toast-container'), e = document.createElement('div');
+  const cl = { success: 'from-emerald-500 to-emerald-600', info: 'from-indigo-500 to-purple-600', error: 'from-red-500 to-red-600' };
+  const ic = { success: 'solar:check-circle-bold', info: 'solar:info-circle-bold', error: 'solar:close-circle-bold' };
+  e.className = 'toast-msg flex items-center gap-3 px-5 py-4 rounded-2xl bg-white border border-gray-100 shadow-2xl shadow-gray-900/10 max-w-sm';
+  e.innerHTML = `<div class="w-8 h-8 rounded-xl bg-gradient-to-br ${cl[t]} flex items-center justify-center flex-shrink-0"><iconify-icon icon="${ic[t]}" class="text-white text-sm"></iconify-icon></div><p class="text-sm font-medium text-gray-700 flex-1">${m}</p><button onclick="this.parentElement.remove()" class="text-gray-300 hover:text-gray-500 transition-colors flex-shrink-0"><iconify-icon icon="solar:close-circle-linear" class="text-lg"></iconify-icon></button>`;
+  c.appendChild(e); requestAnimationFrame(() => e.classList.add('show'));
+  setTimeout(() => { e.classList.remove('show'); setTimeout(() => e.remove(), 500); }, 4000);
+}
+</script>
+</body>
+</html>
