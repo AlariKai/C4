@@ -1,468 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clacnez — Best Accounting Software for SMBs</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],display:['Plus Jakarta Sans','sans-serif']},colors:{navy:{50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#0f2b46',950:'#0a1628}}}}}
-  </script>
-  <style>
-    *{scroll-behavior:smooth;margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;background:#ffffff;color:#374151;overflow-x:hidden}
-    .font-display{font-family:'Plus Jakarta Sans',sans-serif}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clacnez — Best Accounting Software for SMBs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#F0F4F8',
+                            100: '#D9E2EC',
+                            200: '#BCCCDC',
+                            300: '#9FB3C8',
+                            400: '#829AB1',
+                            500: '#627D98',
+                            600: '#486581',
+                            700: '#334E68',
+                            800: '#1E3A5F',
+                            900: '#0B1D3A',
+                            950: '#060F1F',
+                        },
+                        accent: '#3B82F6',
+                    },
+                    fontFamily: {
+                        display: ['"Inter Tight"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --font-display: 'Inter Tight', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
 
-    #splash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(160deg,#0a1628 0%,#0f2b46 30%,#1e40af 60%,#0f2b46 100%);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
-    #splash.hide{opacity:0;transform:scale(1.05);pointer-events:none}
-    #splash .logo-ring{width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(59,130,246,0);animation:splashPulse 1.8s ease-in-out infinite,splashIn .8s cubic-bezier(.16,1,.3,1) forwards;opacity:0;transform:scale(.6)}
-    #splash .logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:2rem;letter-spacing:-.03em;color:white;margin-top:24px;opacity:0;animation:splashFadeUp .6s .3s cubic-bezier(.16,1,.3,1) forwards}
-    #splash .logo-sub{font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.2em;text-transform:uppercase;margin-top:8px;opacity:0;animation:splashFadeUp .6s .5s cubic-bezier(.16,1,.3,1) forwards}
-    #splash .loader{width:40px;height:3px;background:rgba(255,255,255,.08);border-radius:4px;margin-top:32px;overflow:hidden;opacity:0;animation:splashFadeUp .6s .6s cubic-bezier(.16,1,.3,1) forwards}
-    #splash .loader-bar{width:0;height:100%;background:linear-gradient(90deg,#60a5fa,#93c5fa);border-radius:4px;animation:splashLoad 1.6s .7s ease-in-out forwards}
-    @keyframes splashIn{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
-    @keyframes splashPulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 20px rgba(59,130,246,0)}}
-    @keyframes splashFadeUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
-    @keyframes splashLoad{0%{width:0}100%{width:100%}}
-    .splash-particle{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(96,165,250,.5);animation:splashFloat 3s ease-in-out infinite}
-    @keyframes splashFloat{0%,100%{transform:translateY(0) scale(1);opacity:.3}50%{transform:translateY(-30px) scale(1.5);opacity:.7}}
+        * { -webkit-font-smoothing: antialiased; }
+        html { scroll-behavior: smooth; }
 
-    #scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#2563eb,#60a5fa,#2563eb);z-index:200;width:0;box-shadow:0 0 12px rgba(37,99,235,.35)}
+        @keyframes revealUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    #blue-overlay{position:fixed;inset:0;pointer-events:none;z-index:1;transition:opacity .1s linear}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    #cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(59,130,246,.04) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .3s;opacity:0}
-    body:hover #cursor-glow{opacity:1}
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
 
-    #sky-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-    .gradient-text-1{background:linear-gradient(135deg,#111827 0%,#475569 50%,#1e40af 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .gradient-text-2{background:linear-gradient(135deg,#2563eb,#60a5fa,#93c5fd);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gs 4s ease infinite}
-    @keyframes gs{0%,100%{background-position:0% center}50%{background-position:200% center}}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-    @keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-    .animate-float{animation:float 6s ease-in-out infinite}
-    .animate-float-slow{animation:floatSlow 8s ease-in-out infinite}
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-    .sr{opacity:0;transform:translateY(40px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr.visible{opacity:1;transform:translateY(0)}
-    .sr-left{opacity:0;transform:translateX(-50px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-left.visible{opacity:1;transform:translateX(0)}
-    .sr-right{opacity:0;transform:translateX(50px);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-right.visible{opacity:1;transform:translateX(0)}
-    .sr-scale{opacity:0;transform:scale(.85);transition:all .9s cubic-bezier(.16,1,.3,1)}.sr-scale.visible{opacity:1;transform:scale(1)}
-    .sr-tilt{opacity:0;transform:perspective(800px) rotateX(8deg) rotateY(-4deg) translateY(30px) scale(.96);transition:all 1s cubic-bezier(.16,1,.3,1)}.sr-tilt.visible{opacity:1;transform:perspective(800px) rotateX(0) rotateY(0) translateY(0) scale(1)}
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-    .tilt-card{transition:transform .15s ease-out,box-shadow .3s ease;transform-style:preserve-3d}
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+        }
 
-    .icon-box{position:relative;border-radius:20px;display:flex;align-items:center;justify-content:center;transition:all .5s cubic-bezier(.16,1,.3,1);overflow:hidden;background:white;border:1.5px solid var(--icon-border);box-shadow:0 2px 8px -2px var(--icon-shadow)}
-    .icon-box iconify-icon{position:relative;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.06))}
-    .icon-box:hover{transform:scale(1.08) rotate(-2deg);border-color:var(--icon-to);box-shadow:0 8px 30px -5px var(--icon-shadow);background:linear-gradient(135deg,var(--icon-from),var(--icon-to))}
-    .icon-box:hover iconify-icon{color:white!important;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
-    .icon-box-lg{width:80px;height:80px;border-radius:22px}.icon-box-lg iconify-icon{font-size:36px}
-    .icon-box-sm{width:52px;height:52px;border-radius:15px}.icon-box-sm iconify-icon{font-size:22px;color:white;filter:drop-shadow(0 1px 3px rgba(0,0,0,.15))}
-    .icon-box-sm{background:linear-gradient(135deg,var(--icon-from),var(--icon-to));border:none;box-shadow:0 4px 15px -3px var(--icon-shadow)}
+        .reveal { opacity: 0; }
+        .reveal.visible { animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .reveal.visible.delay-1 { animation-delay: 0.1s; }
+        .reveal.visible.delay-2 { animation-delay: 0.2s; }
+        .reveal.visible.delay-3 { animation-delay: 0.3s; }
+        .reveal.visible.delay-4 { animation-delay: 0.4s; }
+        .reveal.visible.delay-5 { animation-delay: 0.5s; }
+        .reveal.visible.delay-6 { animation-delay: 0.6s; }
 
-    .bento-card{background:white;border:1px solid #e8ebf4;border-radius:24px;transition:all .5s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.02)}
-    .bento-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(37,99,235,.15),transparent);opacity:0;transition:opacity .5s}
-    .bento-card:hover::before{opacity:1}
-    .bento-card:hover{border-color:rgba(37,99,235,.12);box-shadow:0 20px 60px -15px rgba(37,99,235,.1),0 8px 20px -8px rgba(0,0,0,.03)}
+        .gradient-text {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    .btn-primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;position:relative;transition:all .4s cubic-bezier(.16,1,.3,1);overflow:hidden;box-shadow:0 4px 15px -3px rgba(37,99,235,.35)}
-    .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .3s}
-    .btn-primary:hover::after{opacity:1}
-    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 35px -5px rgba(37,99,235,.5)}
+        .nav-blur {
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+        }
 
-    .btn-secondary{border:1.5px solid #dbeafe;color:#1d4ed8;background:white;transition:all .4s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    .btn-secondary:hover{border-color:#93c5fd;background:#eff6ff;transform:translateY(-2px);box-shadow:0 6px 20px -4px rgba(37,99,235,.12)}
+        .card-hover {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px -12px rgba(11, 29, 58, 0.15);
+        }
 
-    .btn-dark{background:#0f2b46;color:white;transition:all .4s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 15px -3px rgba(15,43,70,.3)}
-    .btn-dark:hover{transform:translateY(-3px);box-shadow:0 12px 35px -5px rgba(15,43,70,.4)}
+        .btn-primary {
+            background: #0B1D3A;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: #1E3A5F;
+            transform: scale(1.04);
+            box-shadow: 0 12px 40px -8px rgba(11, 29, 58, 0.4);
+        }
 
-    .nav-blur{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-    .nav-link{position:relative}
-    .nav-link::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:linear-gradient(90deg,#3b82f6,#60a5fa);transition:all .3s cubic-bezier(.16,1,.3,1);transform:translateX(-50%);border-radius:1px}
-    .nav-link:hover::after{width:100%}
-    .mobile-menu{transform:translateY(-110%);transition:transform .5s cubic-bezier(.16,1,.3,1)}.mobile-menu.open{transform:translateY(0)}
-    .dashboard-glow{box-shadow:0 25px 80px -20px rgba(37,99,235,.12),0 15px 40px -10px rgba(0,0,0,.06)}
+        .btn-secondary {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-secondary:hover {
+            background: rgba(11, 29, 58, 0.06);
+            transform: scale(1.04);
+        }
 
-    .stat-item{position:relative}
-    .stat-item::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:40px;background:linear-gradient(to bottom,transparent,#dbeafe,transparent)}
-    .stat-item:last-child::after{display:none}
+        .feature-icon-wrap {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover .feature-icon-wrap {
+            transform: scale(1.1) rotate(-3deg);
+            background: #0B1D3A;
+            color: white;
+        }
+        .card-hover:hover .feature-icon-wrap .iconify {
+            color: white !important;
+        }
 
-    .pricing-card{position:relative;border-radius:28px;overflow:hidden}
-    .pricing-card::before{content:'';position:absolute;inset:0;padding:2px;border-radius:28px;background:linear-gradient(135deg,#3b82f6,#60a5fa,#2563eb,#3b82f6);background-size:300% 300%;animation:gs 5s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-    .pricing-inner{background:white;border-radius:27px}
+        .hero-glow {
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+        }
 
-    .marquee-track{animation:marquee 30s linear infinite}.marquee-track:hover{animation-play-state:paused}
-    .toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:12px}
-    .toast-msg{transform:translateX(120%);opacity:0;transition:all .5s cubic-bezier(.16,1,.3,1)}.toast-msg.show{transform:translateX(0);opacity:1}
+        .section-glow {
+            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+        }
 
-    nav,main,footer,section{position:relative;z-index:2}
-    @media(max-width:768px){.stat-item::after{display:none}#cursor-glow{display:none}}
-    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:rgba(37,99,235,.25);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(37,99,235,.4)}
-  </style>
+        .dashboard-mockup {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pricing-card-highlight {
+            animation: pulse-glow 4s ease-in-out infinite;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(59, 130, 246, 0.08));
+        }
+
+        .mobile-menu {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 1.5px;
+            background: #0B1D3A;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .scroll-indicator {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .why-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .why-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6, #60A5FA, #3B82F6);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .why-card:hover::before {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-heading { font-size: 2.5rem !important; }
+        }
+    </style>
 </head>
-<body>
+<body class="font-body text-navy-900 bg-white overflow-x-hidden">
 
-<div id="splash">
-  <div class="splash-particle" style="top:20%;left:25%;animation-delay:0s"></div>
-  <div class="splash-particle" style="top:70%;left:15%;animation-delay:.5s"></div>
-  <div class="splash-particle" style="top:30%;left:75%;animation-delay:1s"></div>
-  <div class="splash-particle" style="top:80%;left:80%;animation-delay:1.5s"></div>
-  <div class="splash-particle" style="top:50%;left:50%;animation-delay:.3s;width:2px;height:2px"></div>
-  <div class="splash-particle" style="top:15%;left:60%;animation-delay:.8s;width:2px;height:2px"></div>
-  <div class="splash-particle" style="top:85%;left:40%;animation-delay:1.2s;width:4px;height:4px;background:rgba(59,130,246,.3)"></div>
-  <div class="splash-particle" style="top:40%;left:10%;animation-delay:2s;width:4px;height:4px;background:rgba(59,130,246,.3)"></div>
-  <div class="logo-ring"><iconify-icon icon="solar:calculator-bold" style="font-size:42px;color:white;filter:drop-shadow(0 2px 8px rgba(59,130,246,.4))"></iconify-icon></div>
-  <div class="logo-text">Clacnez</div>
-  <div class="logo-sub">Accounting Reimagined</div>
-  <div class="loader"><div class="loader-bar"></div></div>
-</div>
-
-<div id="scroll-progress"></div>
-<div id="cursor-glow"></div>
-<div id="blue-overlay"></div>
-<canvas id="sky-canvas"></canvas>
-<div id="toast-container" class="toast-container"></div>
-
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[100] nav-blur bg-white/70 border-b border-gray-100/60 transition-all duration-500">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 lg:h-[72px]">
-      <a href="#" class="flex items-center gap-2.5 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-navy-700 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 group-hover:scale-105 transition-all duration-500"><iconify-icon icon="solar:calculator-bold" class="text-white text-xl"></iconify-icon></div>
-        <span class="font-display font-800 text-xl tracking-tight text-gray-900">Clacnez</span>
-      </a>
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#features" class="nav-link text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors duration-300">About</a>
-        <a href="#pricing" class="nav-link text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors duration-300">Pricing</a>
-        <a href="#cta" class="nav-link text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors duration-300">Contact</a>
-      </div>
-      <div class="hidden md:flex items-center gap-3">
-        <button onclick="showToast('Sign in page coming soon!','info')" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">Sign In</button>
-        <button onclick="showToast('Registration opening soon!','success')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold relative z-10">Register</button>
-      </div>
-      <button class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50" onclick="toggleMenu()"><iconify-icon id="menu-icon" icon="solar:hamburger-menu-linear" class="text-xl text-gray-500"></iconify-icon></button>
-    </div>
-  </div>
-  <div id="mobile-menu" class="mobile-menu md:hidden absolute top-full left-0 right-0 bg-white/95 nav-blur border-t border-gray-100 shadow-xl shadow-gray-200/40">
-    <div class="px-6 py-6 flex flex-col gap-1">
-      <a href="#features" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">About</a>
-      <a href="#pricing" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">Pricing</a>
-      <a href="#cta" onclick="toggleMenu()" class="py-3 px-4 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors">Contact</a>
-      <hr class="my-3 border-gray-100">
-      <button onclick="showToast('Sign in coming soon!','info');toggleMenu();" class="py-3 px-4 rounded-xl text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-left">Sign In</button>
-      <button onclick="showToast('Registration opening soon!','success');toggleMenu();" class="btn-primary py-3 px-4 rounded-xl text-sm font-semibold text-center mt-1 relative z-10">Register</button>
-    </div>
-  </div>
-</nav>
-
-<section class="relative min-h-screen flex items-center pt-24 pb-16 lg:pt-0 lg:pb-0 overflow-hidden" style="background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,.35) 35%,rgba(255,255,255,.85) 65%,rgba(255,255,255,1) 90%)">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
-    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      <div class="max-w-xl">
-        <div class="hero-anim" style="opacity:0;transform:translateY(40px)">
-          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm backdrop-blur-sm mb-8"><span class="relative flex h-2 w-2"><span class="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span><span class="relative rounded-full h-2 w-2 bg-blue-500"></span></span><span class="text-xs font-semibold text-gray-500 tracking-wide">TRUSTED BY 2,000+ BUSINESSES GLOBALLY</span></div>
-        </div>
-        <h1 class="hero-anim font-display font-900 text-[2.6rem] sm:text-5xl lg:text-[3.5rem] leading-[1.08] tracking-tight mb-6" style="opacity:0;transform:translateY(40px)"><span class="gradient-text-1">Best Accounting Software For</span><br><span class="gradient-text-2">Small & Medium Business</span></h1>
-        <p class="hero-anim text-base lg:text-lg text-gray-500 leading-relaxed mb-10 max-w-lg" style="opacity:0;transform:translateY(40px)">Streamline your financial operations with user-friendly tools, real-time insights, tax report generation, multi-currency support and more — all at unbeatable value.</p>
-        <div class="hero-anim flex flex-wrap gap-4 mb-8" style="opacity:0;transform:translateY(40px)">
-          <button onclick="showToast('Free trial activated! Check your email.','success')" class="btn-primary px-8 py-4 rounded-2xl text-sm font-bold tracking-wide relative z-10"><span class="relative z-10 flex items-center gap-2.5">Start Free Trial <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon></span></button>
-          <a href="#pricing" class="btn-secondary px-8 py-4 rounded-2xl text-sm font-bold tracking-wide flex items-center gap-2.5"><iconify-icon icon="solar:play-circle-bold" class="text-lg text-blue-500"></iconify-icon>View Pricing</a>
-        </div>
-        <div class="hero-anim flex items-center gap-6" style="opacity:0;transform:translateY(40px)">
-          <div class="flex -space-x-2.5">
-            <img src="https://picsum.photos/seed/facea/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
-            <img src="https://picsum.photos/seed/faceb/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
-            <img src="https://picsum.photos/seed/facec/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
-            <img src="https://picsum.photos/seed/faced/64/64.jpg" class="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm" alt="">
-            <div class="w-9 h-9 rounded-full border-2 border-white bg-blue-50 flex items-center justify-center shadow-sm"><span class="text-[9px] font-bold text-blue-600">+2K</span></div>
-          </div>
-          <div><div class="flex gap-0.5 mb-0.5"><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon></div><p class="text-[11px] text-gray-400 font-medium">No Credit Card &bull; 30 Days Free</p></div>
-        </div>
-      </div>
-      <div class="hero-anim relative" style="opacity:0;transform:perspective(800px) rotateX(8deg) rotateY(-4deg) translateY(30px) scale(.96);perspective:1200px">
-        <div id="dash-card" class="dashboard-glow rounded-2xl overflow-hidden bg-white border border-gray-100 animate-float-slow relative z-10 tilt-card">
-          <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-gray-50"><div class="w-[10px] h-[10px] rounded-full bg-blue-400"></div><div class="w-[10px] h-[10px] rounded-full bg-gray-300"></div><div class="w-[10px] h-[10px] rounded-full bg-emerald-400"></div><div class="ml-3 flex-1 h-6 bg-white rounded-lg flex items-center px-3 border border-gray-100"><iconify-icon icon="solar:lock-linear" class="text-gray-400 text-[10px] mr-1.5"></iconify-icon><span class="text-[10px] text-gray-400 font-mono">app.clacnez.com/dashboard</span></div></div>
-          <div class="p-4 lg:p-5">
-            <div class="grid grid-cols-3 gap-2.5 mb-4">
-              <div class="bg-gray-50 rounded-xl p-3 border border-gray-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Revenue</p><p class="text-sm font-bold text-gray-900 font-display">$124.5K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-emerald-500 text-[9px]"></iconify-icon><span class="text-[9px] text-emerald-600 font-semibold">12.5%</span></div></div>
-              <div class="bg-gray-50 rounded-xl p-3 border border-gray-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Expenses</p><p class="text-sm font-bold text-gray-900 font-display">$43.2K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-red-400 text-[9px]"></iconify-icon><span class="text-[9px] text-red-500 font-semibold">3.2%</span></div></div>
-              <div class="bg-gray-50 rounded-xl p-3 border border-gray-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">Net Profit</p><p class="text-sm font-bold text-blue-600 font-display">$81.2K</p><div class="flex items-center gap-1 mt-1"><iconify-icon icon="solar:arrow-up-linear" class="text-emerald-500 text-[9px]"></iconify-icon><span class="text-[9px] text-emerald-600 font-semibold">18.7%</span></div></div>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/80 border-b border-navy-100/50">
+        <div class="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-16">
+            <a href="#" class="font-display font-800 text-xl tracking-tight text-navy-900">
+                Clacnez<span class="text-accent">.</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#features" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Features</a>
+                <a href="#pricing" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Pricing</a>
+                <a href="#about" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">About</a>
+                <a href="#contact" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Contact</a>
             </div>
-            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <div class="flex items-center justify-between mb-4"><p class="text-[11px] font-semibold text-gray-700">Revenue Overview</p><div class="flex gap-1"><span class="text-[9px] px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-semibold border border-blue-100">Monthly</span><span class="text-[9px] px-2.5 py-1 rounded-lg text-gray-400 font-medium">Yearly</span></div></div>
-              <svg viewBox="0 0 400 100" class="w-full"><defs><linearGradient id="cg1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/><stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0"/></linearGradient><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="50%" style="stop-color:#60a5fa"/><stop offset="100%" style="stop-color:#93c5fd"/></linearGradient></defs><path d="M0,75 Q50,70 100,60 T200,45 T300,30 T400,15 L400,100 L0,100 Z" fill="url(#cg1)"/><path d="M0,75 Q50,70 100,60 T200,45 T300,30 T400,15" fill="none" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round"/><circle cx="400" cy="15" r="4" fill="#3b82f6"/><circle cx="400" cy="15" r="8" fill="#3b82f6" opacity="0.15"/><text x="0" y="96" fill="#94a3b8" font-size="8" font-family="Inter">Jan</text><text x="65" y="96" fill="#94a3b8" font-size="8" font-family="Inter">Mar</text><text x="140" y="96" fill="#94a3b8" font-size="8" font-family="Inter">May</text><text x="215" y="96" fill="#94a3b8" font-size="8" font-family="Inter">Jul</text><text x="290" y="96" fill="#94a3b8" font-size="8" font-family="Inter">Sep</text><text x="370" y="96" fill="#94a3b8" font-size="8" font-family="Inter">Nov</text></svg>
+            <div class="hidden md:flex items-center gap-4">
+                <button class="text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200 px-4 py-2">Sign In</button>
+                <button class="btn-primary text-sm font-semibold text-white px-5 py-2.5 rounded-full">Register</button>
             </div>
-            <div class="grid grid-cols-5 gap-2.5">
-              <div class="col-span-3 bg-gray-50 rounded-xl p-3 border border-gray-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-2.5">Recent</p><div class="space-y-2.5"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-down-linear" class="text-emerald-500 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Payment received</p><p class="text-[8px] text-gray-400">2 min ago</p></div><span class="text-[10px] font-bold text-emerald-600">+$2,400</span></div><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-up-linear" class="text-red-400 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Cloud hosting</p><p class="text-[8px] text-gray-400">1 hour ago</p></div><span class="text-[10px] font-bold text-red-500">-$350</span></div><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center"><iconify-icon icon="solar:arrow-down-linear" class="text-emerald-500 text-[10px]"></iconify-icon></div><div class="flex-1 min-w-0"><p class="text-[10px] font-semibold text-gray-700 truncate">Invoice #1042</p><p class="text-[8px] text-gray-400">3 hours ago</p></div><span class="text-[10px] font-bold text-emerald-600">+$8,750</span></div></div></div>
-              <div class="col-span-2 bg-gray-50 rounded-xl p-3 border border-gray-100"><p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider mb-3">Breakdown</p><div class="flex items-center justify-center mb-3"><svg viewBox="0 0 80 80" class="w-16 h-16"><circle cx="40" cy="40" r="30" fill="none" stroke="#f1f5f9" stroke-width="7"/><circle cx="40" cy="40" r="30" fill="none" stroke="#3b82f6" stroke-width="7" stroke-dasharray="65 124" stroke-dashoffset="0" transform="rotate(-90 40 40)" stroke-linecap="round"/><circle cx="40" cy="40" r="30" fill="none" stroke="#60a5fa" stroke-width="7" stroke-dasharray="38 151" stroke-dashoffset="-65" transform="rotate(-90 40 40)" stroke-linecap="round"/><circle cx="40" cy="40" r="30" fill="none" stroke="#93c5fd" stroke-width="7" stroke-dasharray="20 169" stroke-dashoffset="-103" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg></div><div class="space-y-1.5"><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Ops 52%</span><span class="text-[8px] text-gray-400">$22.5K</span></div><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>Salary 31%</span><span class="text-[8px] text-gray-400">$13.4K</span></div><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[8px] text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-blue-200"></span>Other 17%</span><span class="text-[8px] text-gray-400">$7.3K</span></div></div></div></div>
+            <button id="mobileToggle" class="md:hidden p-2 text-navy-900" aria-label="Menu">
+                <span class="iconify" data-icon="lucide:menu" data-width="22"></span>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden overflow-hidden max-h-0 opacity-0 bg-white/95 nav-blur">
+            <div class="px-6 py-6 flex flex-col gap-4 border-t border-navy-100">
+                <a href="#features" class="text-base font-medium text-navy-700 py-2">Features</a>
+                <a href="#pricing" class="text-base font-medium text-navy-700 py-2">Pricing</a>
+                <a href="#about" class="text-base font-medium text-navy-700 py-2">About</a>
+                <a href="#contact" class="text-base font-medium text-navy-700 py-2">Contact</a>
+                <hr class="border-navy-100">
+                <button class="text-base font-medium text-navy-700 py-2 text-left">Sign In</button>
+                <button class="btn-primary text-base font-semibold text-white px-5 py-3 rounded-full w-full">Register</button>
             </div>
-          </div>
         </div>
-        <div class="absolute -left-6 lg:-left-10 top-[30%] z-20 animate-float" style="animation-delay:1.5s"><div class="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl shadow-blue-500/10 border border-gray-100"><div class="flex items-center gap-2.5"><div class="icon-box-sm" style="--icon-from:#10b981;--icon-to:#059669;--icon-shadow:rgba(16,185,129,.25)"><iconify-icon icon="solar:check-circle-bold"></iconify-icon></div><div><p class="text-[11px] font-bold text-gray-900">Tax Filed!</p><p class="text-[9px] text-gray-500">GST Q4 2024</p></div></div></div></div>
-        <div class="absolute -right-4 lg:-right-8 bottom-[25%] z-20 animate-float hidden lg:flex" style="animation-delay:3s"><div class="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl shadow-blue-500/10 border border-gray-100"><div class="flex items-center gap-2.5"><div class="icon-box-sm" style="--icon-from:#3b82f6;--icon-to:#2563eb;--icon-shadow:rgba(59,130,246,.25)"><iconify-icon icon="solar:magic-stick-3-bold"></iconify-icon></div><div><p class="text-[11px] font-bold text-gray-900">AI Insight</p><p class="text-[9px] text-gray-500">Save $4.2K next mo</p></div></div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
+    </nav>
 
-<section class="py-12 border-y border-gray-100 bg-white relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-6"><p class="text-center text-[11px] text-gray-400 font-semibold uppercase tracking-[.2em]">Trusted by forward-thinking companies</p></div>
-  <div class="relative overflow-hidden"><div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div><div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
-  <div class="marquee-track flex items-center gap-16 whitespace-nowrap" style="width:max-content">
-    <span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:stripe" class="text-2xl"></iconify-icon> Stripe</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:shopify" class="text-2xl"></iconify-icon> Shopify</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:notion" class="text-2xl"></iconify-icon> Notion</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:figma" class="text-2xl"></iconify-icon> Figma</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:slack" class="text-2xl"></iconify-icon> Slack</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:linear" class="text-2xl"></iconify-icon> Linear</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:vercel" class="text-2xl"></iconify-icon> Vercel</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:intercom" class="text-2xl"></iconify-icon> Intercom</span>
-    <span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:stripe" class="text-2xl"></iconify-icon> Stripe</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:shopify" class="text-2xl"></iconify-icon> Shopify</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:notion" class="text-2xl"></iconify-icon> Notion</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:figma" class="text-2xl"></iconify-icon> Figma</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:slack" class="text-2xl"></iconify-icon> Slack</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:linear" class="text-2xl"></iconify-icon> Linear</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:vercel" class="text-2xl"></iconify-icon> Vercel</span><span class="text-gray-300 font-display font-700 text-lg tracking-tight flex items-center gap-2"><iconify-icon icon="simple-icons:intercom" class="text-2xl"></iconify-icon> Intercom</span>
-  </div></div>
-</section>
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col items-center justify-center hero-glow pt-16">
+        <div class="max-w-[900px] mx-auto px-6 text-center py-24 md:py-32">
+            <div class="reveal visible delay-1">
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-50 text-navy-600 text-xs font-semibold uppercase tracking-widest mb-8">
+                    <span class="iconify text-accent" data-icon="lucide:sparkles" data-width="14"></span>
+                    Best Accounting Software
+                </span>
+            </div>
 
-<section class="py-16 bg-white relative">
-  <div class="max-w-5xl mx-auto px-6 lg:px-8">
-    <div class="sr grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
-      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="2000">0</p><p class="text-sm text-gray-500 font-medium">Active Businesses</p></div>
-      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="99.9" data-suffix="%" data-decimal="1">0</p><p class="text-sm text-gray-500 font-medium">Uptime Guarantee</p></div>
-      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="50" data-suffix="+">0</p><p class="text-sm text-gray-500 font-medium">Currencies Supported</p></div>
-      <div class="stat-item text-center px-4"><p class="font-display font-800 text-3xl lg:text-4xl text-gray-900 mb-1" data-count="4.9" data-suffix="/5" data-decimal="1">0</p><p class="text-sm text-gray-500 font-medium">Customer Rating</p></div>
-    </div>
-  </div>
-</section>
+            <h1 class="hero-heading reveal visible delay-2 font-display font-800 text-[3.5rem] md:text-[5rem] lg:text-[6rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-8">
+                Best Accounting<br>
+                Software For<br>
+                <span class="gradient-text">Small Business</span>
+            </h1>
 
-<section id="features" class="py-24 lg:py-32 bg-gray-50 relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="sr text-center mb-16 lg:mb-20">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6"><iconify-icon icon="solar:widget-2-bold" class="text-blue-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Features</span></div>
-      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">What Clacnez</span><span class="gradient-text-2"> Offers to You!</span></h2>
-      <p class="text-gray-500 text-base lg:text-lg max-w-2xl mx-auto">Everything you need to manage your business finances efficiently and make smarter decisions.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div class="sr-tilt bento-card tilt-card md:col-span-2 lg:col-span-2 p-8 lg:p-10" style="transition-delay:100ms"><div class="flex flex-col lg:flex-row gap-8 items-start"><div class="flex-1">
-          <div class="icon-box icon-box-lg mb-6" style="--icon-from:#2563eb;--icon-to:#1d4ed8;--icon-border:#dbeafe;--icon-shadow:rgba(37,99,235,.2)"><iconify-icon icon="solar:global-bold-duotone" style="font-size:36px;color:#2563eb"></iconify-icon></div>
-          <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Multi Currency</h3>
-          <p class="text-[15px] text-gray-600 leading-relaxed max-w-md mb-5">Accept payments and manage accounts in over 50 currencies with real-time exchange rate conversion.</p>
-          <div class="flex flex-wrap gap-2"><span class="text-[10px] px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 font-semibold">USD</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 font-semibold">EUR</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-teal-50 border border-teal-100 text-teal-600 font-semibold">SGD</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 font-semibold">GBP</span><span class="text-[10px] px-3 py-1.5 rounded-lg bg-blue-50 border-blue-100 text-blue-600 font-semibold">+46 more</span></div></div><div class="w-full lg:w-64 h-40 rounded-xl bg-white border border-gray-100 overflow-hidden relative flex-shrink-0"><div class="absolute inset-0 flex items-center justify-center"><div class="text-center"><p class="text-[10px] text-gray-500 font-medium mb-3">Live Exchange</p><div class="space-y-2"><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">USD/SGD</span><span class="text-[10px] font-mono text-emerald-600 font-semibold">1.3421</span></div><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">EUR/SGD</span><span class="text-[10px] font-mono text-emerald-600 font-semibold">1.4618</span></div><div class="flex items-center justify-between px-4"><span class="text-[10px] text-gray-600">GBP/SGD</span><span class="text-[10px] font-mono text-red-500 font-semibold">1.7023</span></div></div></div></div><svg class="absolute bottom-0 left-0 right-0 h-12 opacity-20" viewBox="0 0 256 48" preserveAspectRatio="none"><path d="M0,30 Q32,25 64,28 T128,20 T192,24 T256,12 L256,48 L0,48 Z" fill="url(#cg1)"/><path d="M0,30 Q32,25 64,28 T128,20 T192,24 T256,12" fill="none" stroke="#3b82f6" stroke-width="1"/></svg></div></div></div></div></div>
-      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:200ms"><div class="icon-box icon-box-lg mb-6" style="--icon-from:#8b5cf6;--icon-to:#7c3aed;--icon-border:#ede9fe;--icon-shadow:rgba(139,92,246,.2)"><iconify-icon icon="solar:magic-stick-3-bold-duotone" style="font-size:36px;color:#8b5cf6"></iconify-icon></div>
-        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">AI Assistant</h3>
-        <p class="text-[15px] text-gray-600 leading-relaxed mb-5">Get intelligent recommendations, anomaly detection, and automated categorization powered by advanced AI.</p>
-        <div class="space-y-2.5"><div class="bg-gray-50 rounded-xl rounded-tl-sm px-3 py-2.5 border border-gray-100"><p class="text-[11px] text-gray-600">Analyze my Q4 spending patterns</p></div><div class="bg-blue-50 rounded-xl rounded-tr-sm px-3 py-2.5 border border-blue-100 ml-4"><p class="text-[11px] text-blue-700 font-medium">Ops costs rose 12% — found $4.2K in savings 🎯</p></div></div></div>
-      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:300ms"><div class="icon-box icon-box-lg mb-6" style="--icon-from:#3b82f6;--icon-to:#2563eb;--icon-border:#dbeafe;--icon-shadow:rgba(59,130,246,.2)"><iconify-icon icon="solar:chart-2-bold-duotone" style="font-size:36px;color:#3b82f6"></iconify-icon></div>
-        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Real-time Analytics</h3>
-        <p class="text-[15px] text-gray-600 leading-relaxed">Monitor cash flow, profit margins, and key performance metrics with interactive dashboards that update in real-time.</p></div>
-      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:400ms"><div class="icon-box icon-box-lg mb-6" style="--icon-from:#0891b2;--icon-to:#059669;--icon-border:#d1fae5;--icon-shadow:rgba(8,145,178,.2)"><iconify-icon icon="solar:wallet-money-bold-duotone" style="font-size:36px;color:#0891b2"></iconify-icon></div>
-        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Expense Tracking</h3>
-        <p class="text-[15px] text-gray-600 leading-relaxed">Snap receipts with your phone, auto-categorize expenses, and set smart budget limits to keep spending in check.</p></div>
-      <div class="sr-tilt bento-card tilt-card p-8" style="transition-delay:500ms"><div class="icon-box icon-box-lg mb-6" style="--icon-from:#0d9488;--icon-to:#0891b2;--icon-border:#ccfbf1;--icon-shadow:rgba(13,148,216,.2)"><iconify-icon icon="solar:document-text-bold-duotone" style="font-size:36px;color:#0d9488"></iconify-icon></div>
-        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Automated Reporting</h3>
-        <p class="text-[15px] text-gray-600 leading-relaxed">Generate P&L statements, balance sheets, and cash flow reports automatically on any schedule.</p></div>
-      <div class="sr-tilt bento-card md:col-span-2 lg:col-span-1 p-8" style="transition-delay:600ms"><div class="icon-box icon-box-lg mb-6" style="--icon-from:#1e3a5f;--icon-to:#0f2b46;--icon-border:#c7d2fe;--icon-shadow:rgba(30,58,86,.2)"><iconify-icon icon="solar:clipboard-check-bold-duotone" style="font-size:36px;color:#1e3a5f"></iconify-icon></div>
-        <h3 class="font-display font-800 text-xl text-gray-900 mb-3">Tax Filing</h3>
-        <p class="text-[15px] text-gray-600 leading-relaxed">Auto-calculate GST, generate IRAS-compliant tax reports, and file directly to tax authorities.</p></div>
-    </div>
-  </div>
-</section>
+            <p class="reveal visible delay-3 text-lg md:text-xl text-navy-500 max-w-[620px] mx-auto leading-relaxed mb-12 font-medium">
+                Streamline your financial operations with user-friendly tools, real-time insights, tax report generation, multi-currency support and many more.
+            </p>
 
-<section class="py-24 lg:py-32 bg-white relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="sr text-center mb-16 lg:mb-20">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-50 border border-gray-200 shadow-sm mb-6"><iconify-icon icon="solar:medal-star-bold" class="text-blue-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Why Clacnez</span></div>
-      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">Why Choose</span><span class="gradient-text-2"> Clacnez?</span></h2>
-      <p class="text-gray-500 text-base lg:text-lg max-w-2xl mx-auto">We built Clacnez to be the most intuitive and affordable accounting solution on the market.</p>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-      <div class="sr-left" style="transition-delay:200ms">
-        <div class="bento-card p-10 lg:p-12 group h-full tilt-card"><div class="absolute top-0 right-0 w-48 h-48 bg-blue-50 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="relative z-10">
-            <div class="icon-box icon-box-lg mb-8" style="--icon-from:#2563eb;--icon-to:#1d4ed8;--icon-border:#dbeafe;--icon-shadow:rgba(37,99,235,.2)"><iconify-icon icon="solar:hand-heart-bold-duotone" style="font-size:36px;color:#2563eb"></iconify-icon></div>
-            <h3 class="font-display font-900 text-2xl lg:text-3xl text-gray-900 mb-4">Super User Friendly</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-8">No accounting degree required. Our interface was designed for business owners, not accountants. Get set up and running in under 5 minutes.</p>
-            <div class="space-y-3.5">
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-blue-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Intuitive from day one — no training needed</span></div>
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-blue-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Drag & drop receipt scanning</span></div>
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-blue-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Works beautifully on mobile & desktop</span></div></div></div></div></div></div>
-      </div>
-      <div class="sr-right" style="transition-delay:400ms">
-        <div class="bento-card p-10 lg:p-12 group h-full tilt-card"><div class="absolute top-0 right-0 w-48 h-48 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="relative z-10">
-            <div class="icon-box icon-box-lg mb-8" style="--icon-from:#0891b2;--icon-to:#059669;--icon-border:#d1fae5;--icon-shadow:rgba(16,145,178,.2)"><iconify-icon icon="solar:tag-price-bold-duotone" style="font-size:36px;color:#0891b2"></iconify-icon></div>
-            <h3 class="font-display font-900 text-2xl lg:text-3xl text-gray-900 mb-4">Unbeatable Price</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-8">Just SGD 19/month for absolutely everything. No tiered pricing, no per-user fees, no hidden charges.</p>
-            <div class="space-y-3.5">
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">No hidden fees — transparent pricing</span></div>
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">Unlimited users included for free</span></div>
-              <div class="flex items-center gap-3 group/item"><div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover/item:bg-emerald-100 transition-colors"><iconify-icon icon="solar:check-circle-bold" class="text-emerald-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-600 group-hover/item:text-gray-900 transition-colors">80% cheaper than leading competitors</span></div></div></div></div></div></div></div>
-    </div>
-  </div>
-</section>
+            <div class="reveal visible delay-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button class="btn-primary text-white font-semibold text-base px-8 py-4 rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    Start Free Trial
+                    <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                </button>
+                <button class="btn-secondary text-navy-700 font-semibold text-base px-8 py-4 rounded-full border border-navy-200 flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    View Pricing
+                </button>
+            </div>
 
-<section id="pricing" class="py-24 lg:py-32 bg-gray-50 relative overflow-hidden">
-  <div class="absolute inset-0"><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-[100px] pointer-events:none"></div></div>
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-    <div class="sr text-center mb-16">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6"><iconify-icon icon="solar:tag-price-bold" class="text-blue-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Pricing</span></div>
-      <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight mb-5"><span class="gradient-text-1">Simplify Your Accounting</span><br><span class="gradient-text-2">with Clacnez</span></h2>
-      <p class="text-gray-500 text-base lg:text-lg max-w-2xl mx-auto">One plan, everything you need. No hidden fees, no surprises.</p>
-    </div>
-    <div class="sr-scale max-w-lg mx-auto" style="transition-delay:200ms">
-      <div class="pricing-card"><div class="pricing-inner p-8 lg:p-10 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-[.03]" style="background:linear-gradient(90deg,transparent,rgba(37,99,235,.8),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite"></div>
-        <div class="relative z-10">
-          <div class="flex items-center justify-between mb-8"><div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100"><iconify-icon icon="solar:star-bold" class="text-blue-500 text-xs"></iconify-icon><span class="text-[10px] font-bold text-blue-600 tracking-wide uppercase">Most Popular</span></div><span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">SAVE 17%</span></div>
-          <div class="mb-8"><div class="flex items-baseline gap-2 mb-2"><span class="text-5xl lg:text-6xl font-display font-900 text-gray-900">SGD 19</span><span class="text-lg text-gray-400 font-medium">/month</span></div>
-          <p class="text-sm text-gray-500">Billed annually. <span class="line-through text-gray-300">SGD 23/month</span> monthly.</p></div>
-          <div class="space-y-4 mb-10">
-            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Unlimited invoices & bills</span></div>
-            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Multi-currency support (50+ currencies)</span></div>
-            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">AI-powered insights & smart assistant</span></div>
-            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Automated GST & tax filing to IRAS</span></div>
-            <div class="flex items-center gap-3.5"><div class="w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0"><iconify-icon icon="solar:check-read-bold" class="text-blue-500 text-xs"></iconify-icon></div><span class="text-sm text-gray-700">Unlimited users & priority support</span></div></div></div>
-          <button onclick="showToast('Redirecting to registration...','success')" class="w-full btn-primary py-4 rounded-2xl text-sm font-bold tracking-wide relative z-10 mb-4"><span class="relative z-10">Get Started — 30 Days Free</span></button>
-          <p class="text-center text-[11px] text-gray-400">No credit card required • Cancel anytime</p>
+            <div class="reveal visible delay-5 flex flex-wrap items-center justify-center gap-6 mt-10 text-xs font-medium text-navy-400">
+                <span class="flex items-center gap-1.5">
+                    <span class="iconify text-green-500" data-icon="lucide:check-circle" data-width="14"></span>
+                    No Credit Card Needed
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <span class="iconify text-green-500" data-icon="lucide:check-circle" data-width="14"></span>
+                    30 Days Free Trial
+                </span>
+            </div>
         </div>
-      </div></div></div>
-    </div>
-  </div>
-</section>
 
-<section id="cta" class="py-24 lg:py-32 bg-white relative overflow-hidden">
-  <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
-    <div class="sr text-center">
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-50 rounded-full blur-[80px] pointer-events-none"></div>
-      <div class="relative z-10">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-50 border border-gray-200 shadow-sm mb-8"><iconify-icon icon="solar:rocket-2-bold" class="text-blue-500 text-sm"></iconify-icon><span class="text-[11px] font-bold text-gray-500 tracking-[.15em] uppercase">Get Started Today</span></div>
-        <h2 class="font-display font-900 text-3xl sm:text-4xl lg:text-[3.2rem] tracking-tight text-gray-900 leading-tight mb-6">Ready to Transform Your<br><span class="gradient-text-2">Financial Management?</span></h2>
-        <p class="text-gray-500 text-base lg:text-lg mb-10 max-w-xl mx-auto leading-relaxed">Join thousands of leading businesses using Clacnez to streamline their finances and make smarter decisions.</p>
-        <button onclick="showToast('Redirecting to pricing...','success')" class="btn-dark px-10 py-4 rounded-2xl text-sm font-bold tracking-wide inline-flex items-center gap-3 mb-8">View Pricing Plans <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon></button>
-        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
-          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-sm"></iconify-icon> Free 30-day trial</span>
-          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-sm"></iconify-icon> No credit card</span>
-          <span class="flex items-center gap-1.5"><iconify-icon icon="solar:check-circle-bold" class="text-blue-500 text-sm"></iconify-icon> Cancel anytime</span>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator">
+            <span class="iconify text-navy-300" data-icon="lucide:chevron-down" data-width="24"></span>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<footer class="bg-navy-900 border-t border-gray-800 pt-16 pb-8 relative">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 lg:gap-16 pb-12 border-b border-gray-800">
-      <div class="col-span-2 md:col-span-1">
-        <div class="flex items-center gap-2.5 mb-5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-navy-700 flex items-center justify-center"><iconify-icon icon="solar:calculator-bold" class="text-white text-lg"></iconify-icon></div><span class="font-display font-800 text-xl tracking-tight text-white">Clacnez</span></div>
-        <p class="text-sm text-gray-400 leading-relaxed max-w-xs mb-5">User-friendly cloud-based accounting software for modern businesses.</p>
-        <div class="flex gap-2.5">
-          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:x" class="text-gray-400 text-sm group-hover:text-white transition-colors"></iconify-icon></a>
-          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:linkedin" class="text-gray-400 text-sm group-hover:text-white transition-colors"></iconify-icon></a>
-          <a href="#" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group"><iconify-icon icon="simple-icons:instagram" class="text-gray-400 text-sm group-hover:text-white transition-colors></iconify-icon></a>
+    <!-- Dashboard Preview -->
+    <section class="relative py-8 md:py-16 section-glow">
+        <div class="max-w-[1100px] mx-auto px-6">
+            <div class="reveal delay-1 dashboard-mockup rounded-2xl md:rounded-3xl overflow-hidden border border-navy-100/80 bg-navy-50/50" style="box-shadow: 0 40px 80px -20px rgba(11, 29, 58, 0.12), 0 0 0 1px rgba(11, 29, 58, 0.04);">
+                <!-- Browser Chrome -->
+                <div class="flex items-center gap-2 px-5 py-3.5 bg-white border-b border-navy-100/60">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-400/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
+                    </div>
+                    <div class="flex-1 flex justify-center">
+                        <div class="bg-navy-50 rounded-lg px-4 py-1.5 text-xs text-navy-400 font-medium flex items-center gap-2">
+                            <span class="iconify" data-icon="lucide:lock" data-width="11"></span>
+                            app.clacnez.com/dashboard
+                        </div>
+                    </div>
+                    <div class="w-16"></div>
+                </div>
+                <!-- Dashboard Content -->
+                <div class="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 p-6 md:p-10">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <p class="text-navy-400 text-xs font-medium uppercase tracking-widest mb-1">Dashboard Overview</p>
+                            <p class="text-white font-display font-700 text-xl md:text-2xl">Welcome back, Sarah</p>
+                        </div>
+                        <div class="hidden md:flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
+                            <span class="iconify text-white/60" data-icon="lucide:search" data-width="14"></span>
+                            <span class="text-white/40 text-xs">Search anything...</span>
+                        </div>
+                    </div>
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                    <span class="iconify text-blue-400" data-icon="lucide:dollar-sign" data-width="16"></span>
+                                </div>
+                            </div>
+                            <p class="text-white/50 text-xs font-medium mb-1">Total Revenue</p>
+                            <p class="text-white font-display font-700 text-lg md:text-xl">$284,320</p>
+                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 12.5%</p>
+                        </div>
+                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                    <span class="iconify text-purple-400" data-icon="lucide:receipt" data-width="16"></span>
+                                </div>
+                            </div>
+                            <p class="text-white/50 text-xs font-medium mb-1">Invoices</p>
+                            <p class="text-white font-display font-700 text-lg md:text-xl">1,284</p>
+                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 8.2%</p>
+                        </div>
+                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                                    <span class="iconify text-amber-400" data-icon="lucide:users" data-width="16"></span>
+                                </div>
+                            </div>
+                            <p class="text-white/50 text-xs font-medium mb-1">Clients</p>
+                            <p class="text-white font-display font-700 text-lg md:text-xl">386</p>
+                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 4.1%</p>
+                        </div>
+                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                                    <span class="iconify text-emerald-400" data-icon="lucide:trending-up" data-width="16"></span>
+                                </div>
+                            </div>
+                            <p class="text-white/50 text-xs font-medium mb-1">Net Profit</p>
+                            <p class="text-white font-display font-700 text-lg md:text-xl">$92,450</p>
+                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 18.3%</p>
+                        </div>
+                    </div>
+                    <!-- Chart Area -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-2 bg-white/[0.05] backdrop-blur-sm rounded-xl p-5 border border-white/[0.06]">
+                            <div class="flex items-center justify-between mb-6">
+                                <p class="text-white font-display font-600 text-sm">Revenue Overview</p>
+                                <div class="flex gap-2">
+                                    <span class="text-xs text-white/40 bg-white/[0.07] px-3 py-1 rounded-full">Monthly</span>
+                                    <span class="text-xs text-white bg-white/[0.15] px-3 py-1 rounded-full">Yearly</span>
+                                </div>
+                            </div>
+                            <!-- SVG Chart -->
+                            <svg viewBox="0 0 500 120" class="w-full" fill="none">
+                                <defs>
+                                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0,100 Q30,95 60,85 T120,70 T180,55 T240,65 T300,40 T360,30 T420,25 T480,15 L500,12 L500,120 L0,120Z" fill="url(#chartGrad)"/>
+                                <path d="M0,100 Q30,95 60,85 T120,70 T180,55 T240,65 T300,40 T360,30 T420,25 T480,15 L500,12" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round"/>
+                                <circle cx="500" cy="12" r="4" fill="#3B82F6"/>
+                                <circle cx="500" cy="12" r="8" fill="#3B82F6" opacity="0.2"/>
+                            </svg>
+                            <div class="flex justify-between mt-3 text-[10px] text-white/30">
+                                <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+                            </div>
+                        </div>
+                        <div class="bg-white/[0.05] backdrop-blur-sm rounded-xl p-5 border border-white/[0.06]">
+                            <p class="text-white font-display font-600 text-sm mb-5">Recent Transactions</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-blue-400" data-icon="lucide:arrow-down-left" data-width="13"></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-white text-xs font-medium truncate">Payment from Acme Co.</p>
+                                        <p class="text-white/40 text-[10px]">2 hours ago</p>
+                                    </div>
+                                    <p class="text-green-400 text-xs font-semibold">+$4,200</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-red-400" data-icon="lucide:arrow-up-right" data-width="13"></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-white text-xs font-medium truncate">AWS Subscription</p>
+                                        <p class="text-white/40 text-[10px]">5 hours ago</p>
+                                    </div>
+                                    <p class="text-red-400 text-xs font-semibold">-$1,240</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-blue-400" data-icon="lucide:arrow-down-left" data-width="13"></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-white text-xs font-medium truncate">Invoice #1284</p>
+                                        <p class="text-white/40 text-[10px]">Yesterday</p>
+                                    </div>
+                                    <p class="text-green-400 text-xs font-semibold">+$8,750</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-red-400" data-icon="lucide:arrow-up-right" data-width="13"></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-white text-xs font-medium truncate">Office Rent</p>
+                                        <p class="text-white/40 text-[10px]">3 days ago</p>
+                                    </div>
+                                    <p class="text-red-400 text-xs font-semibold">-$3,500</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Product</h4><ul class="space-y-3"><li><a href="#features" class="text-sm text-gray-400 hover:text-white transition-colors">Features</a></li><li><a href="#pricing" class="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a></li></ul></div>
-      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Company</h4><ul class="space-y-3"><li><a href="#features" class="text-sm text-gray-400 hover:text-white transition-colors">About</a></li><li><a href="#cta" class="text-sm text-gray-400 hover:text-white transition-colors">Contact</a></li></ul></div>
-      <div><h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-[.2em] mb-5">Legal</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li><li><a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">Terms & Conditions</a></li></ul></div>
-    </div>
-    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-gray-500">© 2025 Clacnez. All rights reserved.</p>
-      <p class="text-sm text-gray-600">Crafted with precision for modern businesses</p>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<script>
-// ===== SPLASH =====
-window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('splash').classList.add('hide');setTimeout(animateHero,300)},2400)});
-function animateHero(){document.querySelectorAll('.hero-anim').forEach((el,i)=>{const isTilt=el.style.transform.includes('perspective');el.style.transition=`all 1s cubic-bezier(.16,1,.3,1) ${i*120}ms`;requestAnimationFrame(()=>{el.style.opacity='1';el.style.transform=isTilt?'perspective(800px) rotateX(0) rotateY(0) translateY(0) scale(1)':'translateY(0)'})})}
+    <!-- Features Section -->
+    <section id="features" class="py-24 md:py-36 bg-white">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div class="text-center mb-16 md:mb-20">
+                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Features</span>
+                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                    What Clacnez Offers<br><span class="gradient-text">to You.</span>
+                </h2>
+                <p class="reveal delay-2 text-navy-500 text-lg max-w-[520px] mx-auto">
+                    Powerful tools designed to simplify every aspect of your financial management.
+                </p>
+            </div>
 
-// ===== SCROLL PROGRESS =====
-const progressBar=document.getElementById('scroll-progress');
-window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;progressBar.style.width=(window.scrollY/h*100)+'%'},{passive:true});
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Feature 1 -->
+                <div class="reveal delay-1 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:globe" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Multi Currency</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Manage and track transactions in multiple currencies with real-time exchange rates and automatic conversion.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="reveal delay-2 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:bot" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">AI Assistant</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Chat with our intelligent assistant for real-time financial insights, reports, and answers to your queries.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="reveal delay-3 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:bar-chart-3" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Real-time Analytics</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Get instant access to financial metrics, trends, and customizable reports for better decision-making.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="reveal delay-1 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:wallet" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Expense Tracking</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Get a clear picture of your spending habits and make smart financial decisions with comprehensive tracking.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="reveal delay-2 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:file-text" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Automated Reporting</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Generate comprehensive financial reports automatically, compliant with global reporting standards.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="reveal delay-3 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
+                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
+                        <span class="iconify text-navy-700" data-icon="lucide:landmark" data-width="22"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Tax Filing</h3>
+                    <p class="text-navy-500 text-sm leading-relaxed">Simplify tax preparation and filing with automated calculations and compliance with local tax regulations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ===== BLUE OVERLAY =====
-const blueOverlay=document.getElementById('blue-overlay');
-let scrollPct=0,lastSkyPct=-1;
-function updateBlueShift(){
-  scrollPct=Math.min(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight),1);
-  if(Math.abs(scrollPct-lastSkyPct)>.02){
-    lastSkyPct=scrollPct;
-    buildSkyCache(scrollPct);
-    buildSunCache(scrollPct);
-  }
-  const overlayOpacity=scrollPct*0.12;
-  const overlayBg=`linear-gradient(180deg,transparent 0%,rgba(30,58,80,246,${overlayOpacity*.35}) 25%,rgba(37,99,246,${overlayOpacity*.65}) 55%,rgba(15,43,80,${overlayOpacity*.9}) 85%,rgba(15,43,80,${overlayOpacity}*100%)`;
-  blueOverlay.style.background=overlayBg;
-  blueOverlay.style.opacity='1';
-}
-window.addEventListener('scroll',updateBlueShift,{passive:true});
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 md:py-36 bg-navy-50/40">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div class="text-center mb-16 md:mb-20">
+                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Pricing</span>
+                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                    Simplify Your Accounting<br><span class="gradient-text">with Clacnez</span>
+                </h2>
+                <p class="reveal delay-2 text-navy-500 text-lg max-w-[480px] mx-auto">
+                    Everything you need. Nothing you don't.
+                </p>
+            </div>
 
-// ===== CURSOR GLOW =====
-const cursorGlow=document.getElementById('cursor-glow');
-document.addEventListener('mousemove',e=>{cursorGlow.style.left=e.clientX+'px';cursorGlow.style.top=e.clientY+'px'});
+            <div class="reveal delay-2 max-w-[480px] mx-auto">
+                <div class="pricing-card-highlight rounded-3xl border border-navy-100/80 bg-white p-8 md:p-12 text-center relative overflow-hidden" style="box-shadow: 0 30px 60px -15px rgba(11, 29, 58, 0.1);">
+                    <!-- Badge -->
+                    <div class="absolute top-6 right-6">
+                        <span class="inline-flex items-center gap-1 bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                            <span class="iconify" data-icon="lucide:zap" data-width="11"></span>
+                            Best Value
+                        </span>
+                    </div>
 
-// ===== 3D TILT =====
-document.querySelectorAll('.tilt-card').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateY(${x*6}deg) rotateX(${-y*6}deg) scale(1.02)`;card.style.boxShadow=`${-x*20}px ${y*20}px 40px -10px rgba(37,99,235,.08),0 1px 3px rgba(0,0,0,.02)`});card.addEventListener('mouseleave',()=>{card.style.transform='';card.style.boxShadow=''})});
+                    <p class="text-navy-500 text-sm font-semibold uppercase tracking-widest mb-2">Only For</p>
+                    <div class="flex items-baseline justify-center gap-1 mb-2">
+                        <span class="text-navy-400 text-2xl font-display font-600">SGD</span>
+                        <span class="font-display font-900 text-[5rem] md:text-[6.5rem] leading-none tracking-tighter text-navy-900">19</span>
+                        <span class="text-navy-400 text-lg font-medium">/month</span>
+                    </div>
+                    <p class="text-navy-400 text-sm mb-8">Billed monthly. Cancel anytime.</p>
 
-// ===== SKY SCENERY =====
-const canvas=document.getElementById('sky-canvas'),ctx=canvas.getContext('2d');
-let W,H,skyCache,sunCache,clouds=[],motes=[];
-const mob=window.innerWidth<768;
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height;buildSkyCache(scrollPct);buildSunCache(scrollPct)}
-function buildSkyCache(pct){
-  pct=pct||0;
-  const r1=lerp(135,159,200,pct),g1=lerp(179,195,238,pct),b1=lerp(222,227,248,pct);
-  const r2=lerp(198,211,240,pct),g2=lerp(179,195,233,pct),b2=lerp(238,240,250,pct);
-  const r3=lerp(198,211,240,pct),g3=lerp(233,234,244,pct),b3=lerp(250,250,252,pct);
-  const r4=lerp(250,250,253,pct),g4=lerp(252,253,255,pct),g5=lerp(250,250,253,pct),b5=lerp(252,253,255,pct);
-  const r5=lerp(250,250,253,pct),g5=lerp(252,253,255);
-  const grad=ctx.createLinearGradient(0,0,0,0,H);
-  grad.addColorStop(0,`rgb(${r1},${g1},${b1})`);grad.addColorStop(0.15,`rgb(${r2},${g2},${b2})`);grad.addColorStop(0.35,`rgba(${r3},${g3},${b3})`);grad.addColorStop(0.55,`rgba(${r4},${g4},${b4})`);grad.addColorStop(0.75,`rgba(${r5},${g5},${b5})`);
-  grad.addColorStop(0.88,`rgba(${lerp(250,250,253},${lerp(250,250,253)})`);
-  grad.addColorStop(1,'#f8f9fd');
-  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-  skyCache=o;
-}
-function buildSunCache(pct){
-  pct=pct||0;
-  const o=document.createElement('canvas');const s=Math.min(W,H)*.7;o.width=s;o.height=s;const c=o.getContext('2d');
-  const cx=s*.65,cy=s*.2,r=s*.45;
-  const cr=lerp(255,248,240,pct),cg=lerp(248,245,248,pct),mg=lerp(240,220,200,pct),og=lerp(230,220,180,pct),ob=lerp(200,160,140,pct);
-  const g=c.createRadialGradient(cx,cy,0,cx,cy,0,cx,cy,r);
-  g.addColorStop(0,`rgba(${cr},${cg},${cg},${cb})`);g.addColorStop(0.05,`rgba(${cr},${cg},${cb})`);g.addColorStop(1,`rgba(${or},${og},${ob})`);g.addColorStop(0.05,`rgba(${or},${og},${ob})`);g.addColorStop(1,`rgba(${or},${og},${ob})`);
-  c.fillStyle=g;c.fillRect(0,0,s,s,s);
-  const g2=c.createRadialGradient(cx,cy,0,cx,cy,s*.06);
-  g2.addColorStop(0,`rgba(${cr},${cg},${cg})`);g2.addColorStop(1,`rgba(${cr},${cg})`);
-  c.fillStyle=g2;c.fillRect(0,0,s,s);c.fillStyle=g2;c.fillRect(0,0,s,s);
-  sunCache=o;
-}
-function genPuffs(w,h,n){const p=[];const bn=Math.floor(w/28);for(let i=0;i<bn;i++){const t=bn>1?i/(bn-1):.5;p.push({x:w*.08+t*w*.84,y:h*.62+(Math.random()-.5)*h*.08,r:Math.max(8,h*.32+Math.random()*h*.12})}
-  const tn=3+Math.floor(Math.random()*4);for(let i=0;i<tn;i++)p.push({x:w*.15+Math.random()*w*.7,y:h*.28+Math.random()*h*.18,r:Math.max(8,h*.28+Math.random()*h*.22});for(let i=0;i<n-bn-tn;i++)p.push({x:w*.1+Math.random()*w*.8,y:h*.3+Math.random()*h*.3,r:Math.max(8,h*.2+Math.random()*h*.15)});return p}
-class Cloud{
-  constructor(layer){this.layer=layer;const sc=.4+layer*.35;const bw=(180+Math.random()*120)*sc,bh=(70+Math.random()*40)*sc;const op=.25+layer*.18;this.x=Math.random()*W*1.4-W*.2;this.y=Math.random()*H*.55+H*.02;this.speed=(.08+layer*.06+Math.random()*.04)*(mob?.5:1);this.canvas=this._r(bw,bh,op);this.w=this.canvas.width;this.h=this.canvas.height}
-  _r(bw,bh,op){const pad=30,o=document.createElement('canvas');o.width=bw+pad*2;o.height=bh+pad*2;const c=o.getContext('2d'),puffs=genPuffs(bw,bh,14+this.layer*6);for(const p of puffs){const r=Math.max(1,p.r);const g=c.createRadialGradient(p.x+pad,p.y+pad,r*.05,p.x+pad,p.y+pad,r);g.addColorStop(0,`rgba(255,255,255,${op})`);g.addColorStop(.5,`rgba(255,255,255,${op*.6})`);g.addColorStop(1,'rgba(255,255,255,0)');c.beginPath();c.arc(p.x+pad,p.y+pad,r,0,Math.PI*2);c.fillStyle=g;c.fill();c.fillRect(0,0,bw+pad*2,bh+pad*2);c.fillRect(0,0,bw+pad*2,bh+pad*2);c.beginPath();c.arc(p.x+pad,p.y+pad,r,0,Math.PI*2);c.fillStyle=g;}};return o}
-  update(){this.x+=this.speed;if(this.x-this.w/2>W+50){this.x=-this.w/2-Math.random()*200;this.y=Math.random()*H*.55+H*.02}draw(){ctx.drawImage(this.canvas,this.x-this.w/2,this.y-this.h/2)}
-}
-class Mote{constructor(){this.x=Math.random()*W;this.y=Math.random()*H*.7;this.r=1+Math.random()*2;this.vx=(Math.random()-.5)*.15;this.vy=(Math.random()-.5)*.1;this.ba=.08+Math.random()*.2;this.ph=Math.random()*Math.PI*2;this.sp=.008+Math.random()*.012}
-  update(t){this.x+=this.vx;this.y+=this.vy;this.a=this.ba+Math.sin(t*this.sp+this.ph)*this.ba*.5;if(this.x<-20)this.x=W+20;if(this.x>W+20)this.x=-20;if(this.y<-20)this.y=H*.7+20;if(this.y>H*.7+20)this.y=-20}
-  draw(){const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r*3);g.addColorStop(0,`rgba(255,248,253,${this.a})`);g.addColorStop(1,'rgba(255,248,253,0)');ctx.fillStyle=g;ctx.fillRect(this.x-this.r*3,this.y-this.r*3,this.r*6,this.r*6,this.r*6);ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,253,248,${this.a*1.5})`;ctx.fill()}
+                    <button class="btn-primary w-full text-white font-semibold text-base px-8 py-4 rounded-full flex items-center justify-center gap-2.5 mb-6">
+                        Try It Now
+                        <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                    </button>
 
-// ===== UI =====
-let mo2=false;function toggleMenu(){mo2=!mo2;document.getElementById('mobile-menu').classList.toggle('open',mo2);document.getElementById('menu-icon').setAttribute('icon',mo2?'solar:close-circle-linear':'solar:hamburger-menu-linear')}
-const nav=document.getElementById('navbar');window.addEventListener('scroll',()=>{if(window.scrollY>20){nav.classList.add('bg-white/90','shadow-sm','border-gray-200/50');nav.classList.remove('bg-white/70');nav.classList.remove('border-gray-200/50')}else{nav.classList.remove('bg-white/90','shadow-sm','border-gray-200/50');nav.classList.add('bg-white/70')}
-    if(window.scrollY>20){nav.classList.add('border-gray-200/60');nav.classList.remove('border-gray-200/50')}else{nav.classList.remove('border-gray-200/60')}
-    nav.classList.add('bg-white/70')}
-    nav.classList.remove('bg-white/70')
-  }, {passive:true});
-document.querySelectorAll('.sr,.sr-left,.sr-right,.sr-scale,.sr-tilt').forEach(el=>io.observe(el));
-const cio=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){animC();cio.unobserve(en.target)}}),{threshold:.3,rootMargin:'0px 0px -60px 0px'}
-const fs=document.querySelector('[data-count]');if(fs)cio.observe(fs.closest('.sr'));
-function animC(){document.querySelectorAll('[data-count]').forEach(el=>{const tgt=parseFloat(el.dataset.count),s=el.dataset.suffix||'',d=parseInt(el.dataset.decimal)||0,dur=2000,st=performance.now();function u(n){const p=Math.min((n-st)/dur,1),e2=1-Math.pow(1-p,4),c=tgt*tgt;el.textContent=(d>0?c.toFixed(d):Math.floor(c).toLocaleString())+s;if(p<1)requestAnimationFrame(u)})
-<script>
-// ===== SCROLL PROGRESS =====
-const progressBar=document.getElementById('scroll-progress');
-window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;progressBar.style.width=(window.scrollY/h*100)+'%'},{passive:true});
+                    <div class="space-y-3 text-left">
+                        <div class="flex items-center gap-3 text-sm text-navy-600">
+                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                            All 6 core features included
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-navy-600">
+                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                            Unlimited transactions
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-navy-600">
+                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                            Multi-currency support
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-navy-600">
+                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                            AI-powered insights
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-navy-600">
+                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                            Priority customer support
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ===== CURSOR GLOW =====
-const cursorGlow=document.getElementById('cursor-glow');
-document.addEventListener('mousemove',e=>{cursorGlow.style.left=e.clientX+'px';cursorGlow.style.top=e.clientY+'px'});
-</script>
-</script>
+    <!-- Why Choose Section -->
+    <section id="about" class="py-24 md:py-36 bg-white">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div class="text-center mb-16 md:mb-20">
+                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Why Clacnez</span>
+                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                    Why Choose<br><span class="gradient-text">Clacnez?</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
+                <!-- Why Card 1 -->
+                <div class="reveal delay-1 why-card card-hover bg-white border border-navy-100/80 rounded-2xl p-8 md:p-10">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/10 to-blue-500/5 flex items-center justify-center mb-6">
+                        <span class="iconify text-accent" data-icon="lucide:mouse-pointer-click" data-width="24"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-xl text-navy-900 mb-4">Super User Friendly</h3>
+                    <p class="text-navy-500 text-[15px] leading-relaxed">Clacnez features a super user-friendly interface that's intuitive and easy to use, with clear visualisations, one-click actions, and guided tutorials to help you get started quickly.</p>
+                </div>
+                <!-- Why Card 2 -->
+                <div class="reveal delay-2 why-card card-hover bg-white border border-navy-100/80 rounded-2xl p-8 md:p-10">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-green-500/5 flex items-center justify-center mb-6">
+                        <span class="iconify text-emerald-500" data-icon="lucide:badge-dollar-sign" data-width="24"></span>
+                    </div>
+                    <h3 class="font-display font-700 text-xl text-navy-900 mb-4">Unbeatable Price</h3>
+                    <p class="text-navy-500 text-[15px] leading-relaxed">Clacnez offers unbeatable value for money with flexible pricing plans designed to fit small and medium businesses, ensuring you get the best financial management tools without breaking the bank.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 md:py-36 relative overflow-hidden">
+        <div class="absolute inset-0 bg-navy-900"></div>
+        <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 70%);"></div>
+        <!-- Grid pattern -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
+        <div class="relative max-w-[800px] mx-auto px-6 text-center">
+            <h2 class="reveal font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-white mb-6">
+                Ready to Transform<br>Your Financial Management?
+            </h2>
+            <p class="reveal delay-1 text-navy-300 text-lg md:text-xl max-w-[520px] mx-auto mb-10 leading-relaxed">
+                Join leading global businesses using Clacnez to streamline their finances.
+            </p>
+            <div class="reveal delay-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button class="bg-white text-navy-900 font-semibold text-base px-8 py-4 rounded-full flex items-center gap-2.5 transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_-8px_rgba(255,255,255,0.2)] w-full sm:w-auto justify-center">
+                    View Pricing Plans
+                    <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                </button>
+                <button class="text-white/80 font-semibold text-base px-8 py-4 rounded-full border border-white/20 flex items-center gap-2.5 transition-all duration-300 hover:bg-white/10 hover:scale-105 w-full sm:w-auto justify-center">
+                    Start Free Trial
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-navy-950 text-white py-16 md:py-20">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-16">
+                <!-- Brand -->
+                <div class="col-span-2 md:col-span-1">
+                    <a href="#" class="font-display font-800 text-xl tracking-tight text-white inline-block mb-4">
+                        Clacnez<span class="text-accent">.</span>
+                    </a>
+                    <p class="text-navy-400 text-sm leading-relaxed">User-friendly cloud-based accounting software for modern businesses.</p>
+                </div>
+                <!-- Product -->
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Product</p>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Features</a></li>
+                        <li><a href="#pricing" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Pricing</a></li>
+                    </ul>
+                </div>
+                <!-- Company -->
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Company</p>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">About</a></li>
+                        <li><a href="#contact" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Legal -->
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Legal</p>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+                        <li><a href="#" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-navy-500 text-xs">© 2025 Clacnez. All rights reserved.</p>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
+                        <span class="iconify" data-icon="lucide:twitter" data-width="18"></span>
+                    </a>
+                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
+                        <span class="iconify" data-icon="lucide:linkedin" data-width="18"></span>
+                    </a>
+                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
+                        <span class="iconify" data-icon="lucide:instagram" data-width="18"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -60px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let menuOpen = false;
+
+        mobileToggle.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                mobileMenu.style.opacity = '1';
+                mobileToggle.innerHTML = '<span class="iconify" data-icon="lucide:x" data-width="22"></span>';
+            } else {
+                mobileMenu.style.maxHeight = '0';
+                mobileMenu.style.opacity = '0';
+                mobileToggle.innerHTML = '<span class="iconify" data-icon="lucide:menu" data-width="22"></span>';
+            }
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.style.maxHeight = '0';
+                mobileMenu.style.opacity = '0';
+                mobileToggle.innerHTML = '<span class="iconify" data-icon="lucide:menu" data-width="22"></span>';
+            });
+        });
+
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-sm');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
