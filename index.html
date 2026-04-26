@@ -8,7 +8,7 @@
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -27,7 +27,6 @@
                             900: '#0B1D3A',
                             950: '#060F1F',
                         },
-                        accent: '#3B82F6',
                     },
                     fontFamily: {
                         display: ['"Inter Tight"', 'sans-serif'],
@@ -41,536 +40,527 @@
         :root {
             --font-display: 'Inter Tight', sans-serif;
             --font-body: 'Inter', sans-serif;
+            --blue: rgb(29, 78, 216);
+            --blue-hover: rgb(22, 62, 180);
+            --blue-glow: rgba(29, 78, 216, 0.35);
         }
 
-        * { -webkit-font-smoothing: antialiased; }
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); }
 
+        /* ---- Animations ---- */
         @keyframes revealUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
+        @keyframes revealScale {
+            from { opacity: 0; transform: scale(0.92); }
             to { opacity: 1; transform: scale(1); }
         }
-
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes floatDashboard {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-16px) rotate(0.25deg); }
+            66% { transform: translateY(-8px) rotate(-0.25deg); }
         }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes floatShadow {
+            0%, 100% { transform: scaleX(1) scaleY(1); opacity: 0.3; }
+            33% { transform: scaleX(0.94) scaleY(0.88); opacity: 0.15; }
+            66% { transform: scaleX(0.97) scaleY(0.93); opacity: 0.22; }
         }
-
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-25px, 25px) scale(0.96); }
+            66% { transform: translate(15px, -30px) scale(1.04); }
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
         @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         .reveal { opacity: 0; }
-        .reveal.visible { animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .reveal.visible.delay-1 { animation-delay: 0.1s; }
-        .reveal.visible.delay-2 { animation-delay: 0.2s; }
-        .reveal.visible.delay-3 { animation-delay: 0.3s; }
-        .reveal.visible.delay-4 { animation-delay: 0.4s; }
-        .reveal.visible.delay-5 { animation-delay: 0.5s; }
-        .reveal.visible.delay-6 { animation-delay: 0.6s; }
+        .reveal.visible { animation: revealUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .reveal-scale.visible { animation: revealScale 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .reveal.visible.d1 { animation-delay: 0.1s; }
+        .reveal.visible.d2 { animation-delay: 0.2s; }
+        .reveal.visible.d3 { animation-delay: 0.3s; }
+        .reveal.visible.d4 { animation-delay: 0.4s; }
+        .reveal.visible.d5 { animation-delay: 0.5s; }
+        .reveal.visible.d6 { animation-delay: 0.6s; }
+        .reveal.visible.d7 { animation-delay: 0.7s; }
 
+        /* ---- Gradients ---- */
         .gradient-text {
-            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%);
+            background: linear-gradient(135deg, rgb(29, 78, 216) 0%, rgb(59, 130, 246) 40%, rgb(96, 165, 250) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
+        /* ---- Buttons ---- */
+        .btn-blue {
+            background: rgb(29, 78, 216);
+            color: #fff;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-blue::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.15) 50%, transparent 55%);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .btn-blue:hover::before { opacity: 1; }
+        .btn-blue:hover {
+            background: rgb(22, 62, 180);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 16px 48px -8px rgba(29, 78, 216, 0.5), 0 4px 12px -2px rgba(29, 78, 216, 0.3);
+        }
+        .btn-blue:active { transform: translateY(0) scale(0.98); }
+
+        .btn-blue-outline {
+            background: rgba(29, 78, 216, 0.06);
+            color: rgb(29, 78, 216);
+            border: 1.5px solid rgba(29, 78, 216, 0.2);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-blue-outline:hover {
+            background: rgb(29, 78, 216);
+            color: #fff;
+            border-color: rgb(29, 78, 216);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 16px 48px -8px rgba(29, 78, 216, 0.4);
+        }
+
+        .btn-white {
+            background: #fff;
+            color: rgb(29, 78, 216);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-white:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 16px 48px -8px rgba(0,0,0,0.2);
+        }
+
+        .btn-white-ghost {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-white-ghost:hover {
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* ---- Nav ---- */
         .nav-blur {
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
         }
-
-        .card-hover {
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 60px -12px rgba(11, 29, 58, 0.15);
-        }
-
-        .btn-primary {
-            background: #0B1D3A;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-primary:hover {
-            background: #1E3A5F;
-            transform: scale(1.04);
-            box-shadow: 0 12px 40px -8px rgba(11, 29, 58, 0.4);
-        }
-
-        .btn-secondary {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-secondary:hover {
-            background: rgba(11, 29, 58, 0.06);
-            transform: scale(1.04);
-        }
-
-        .feature-icon-wrap {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-hover:hover .feature-icon-wrap {
-            transform: scale(1.1) rotate(-3deg);
-            background: #0B1D3A;
-            color: white;
-        }
-        .card-hover:hover .feature-icon-wrap .iconify {
-            color: white !important;
-        }
-
-        .hero-glow {
-            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
-        }
-
-        .section-glow {
-            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
-        }
-
-        .dashboard-mockup {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .pricing-card-highlight {
-            animation: pulse-glow 4s ease-in-out infinite;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(59, 130, 246, 0.08));
-        }
-
-        .mobile-menu {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .nav-link {
-            position: relative;
-        }
+        .nav-link { position: relative; }
         .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -4px;
-            left: 50%;
-            width: 0;
-            height: 1.5px;
-            background: #0B1D3A;
+            bottom: -4px; left: 50%;
+            width: 0; height: 2px;
+            background: rgb(29, 78, 216);
+            border-radius: 1px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             transform: translateX(-50%);
         }
-        .nav-link:hover::after {
-            width: 100%;
-        }
+        .nav-link:hover::after { width: 100%; }
 
-        .scroll-indicator {
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .why-card {
+        /* ---- Cards ---- */
+        .feature-card {
+            background: #fff;
+            border: 1px solid rgba(29, 78, 216, 0.06);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100%;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(29, 78, 216, 0.04), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(29, 78, 216, 0.12);
+            box-shadow: 0 25px 60px -15px rgba(29, 78, 216, 0.1), 0 8px 20px -8px rgba(0,0,0,0.04);
+        }
+        .feature-icon {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.08);
+            background: rgb(29, 78, 216) !important;
+            color: #fff !important;
+        }
+        .feature-card:hover .feature-icon .iconify { color: #fff !important; }
+
+        .why-card {
+            position: relative; overflow: hidden;
+            background: #fff;
+            border: 1px solid rgba(29, 78, 216, 0.06);
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .why-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #3B82F6, #60A5FA, #3B82F6);
+            background: linear-gradient(90deg, rgb(29, 78, 216), rgb(96, 165, 250), rgb(29, 78, 216));
             background-size: 200% 100%;
             animation: gradientShift 3s ease infinite;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s;
         }
-        .why-card:hover::before {
-            opacity: 1;
+        .why-card:hover::before { opacity: 1; }
+        .why-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 60px -15px rgba(29, 78, 216, 0.12);
+            border-color: rgba(29, 78, 216, 0.12);
         }
+
+        /* ---- Dashboard ---- */
+        .float-container { animation: floatDashboard 7s ease-in-out infinite; }
+        .float-shadow {
+            animation: floatShadow 7s ease-in-out infinite;
+            background: radial-gradient(ellipse at center, rgba(29, 78, 216, 0.2) 0%, transparent 70%);
+            filter: blur(35px);
+        }
+        .dash-wrap::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        /* ---- Decorative ---- */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .orb-1 { animation: orbFloat1 12s ease-in-out infinite; }
+        .orb-2 { animation: orbFloat2 15s ease-in-out infinite; }
+
+        /* ---- Pricing ---- */
+        .pricing-glow {
+            background: linear-gradient(160deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.07));
+            animation: pulseRing 4s ease-out infinite;
+        }
+        .pricing-card {
+            background: #fff;
+            border: 1px solid rgba(29, 78, 216, 0.1);
+            border-radius: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px;
+            height: 4px;
+            background: linear-gradient(90deg, rgb(29, 78, 216), rgb(96, 165, 250), rgb(29, 78, 216));
+            background-size: 200% 100%;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        /* ---- Stats ---- */
+        .stat-item {
+            position: relative;
+        }
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 20%; height: 60%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(29, 78, 216, 0.15), transparent);
+        }
+        .stat-item:last-child::after { display: none; }
+
+        /* ---- Mobile ---- */
+        .mobile-menu {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .scroll-indicator { animation: floatDashboard 2.5s ease-in-out infinite; }
 
         @media (max-width: 768px) {
             .hero-heading { font-size: 2.5rem !important; }
+            .stat-item::after { display: none; }
         }
     </style>
 </head>
-<body class="font-body text-navy-900 bg-white overflow-x-hidden">
+<body class="text-navy-900 bg-white overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/80 border-b border-navy-100/50">
-        <div class="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-16">
-            <a href="#" class="font-display font-800 text-xl tracking-tight text-navy-900">
-                Clacnez<span class="text-accent">.</span>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/70 border-b border-navy-100/40 transition-shadow duration-300">
+        <div class="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-[68px]">
+            <a href="#" class="font-display font-800 text-[1.2rem] tracking-tight text-navy-900 flex items-center gap-0.5">
+                Clacnez<span style="color: rgb(29, 78, 216);">.</span>
             </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#features" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Features</a>
-                <a href="#pricing" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Pricing</a>
-                <a href="#about" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">About</a>
-                <a href="#contact" class="nav-link text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200">Contact</a>
+            <div class="hidden md:flex items-center gap-9">
+                <a href="#features" class="nav-link text-[13px] font-medium text-navy-500 hover:text-navy-900 transition-colors">Features</a>
+                <a href="#pricing" class="nav-link text-[13px] font-medium text-navy-500 hover:text-navy-900 transition-colors">Pricing</a>
+                <a href="#about" class="nav-link text-[13px] font-medium text-navy-500 hover:text-navy-900 transition-colors">About</a>
+                <a href="#contact" class="nav-link text-[13px] font-medium text-navy-500 hover:text-navy-900 transition-colors">Contact</a>
             </div>
-            <div class="hidden md:flex items-center gap-4">
-                <button class="text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors duration-200 px-4 py-2">Sign In</button>
-                <button class="btn-primary text-sm font-semibold text-white px-5 py-2.5 rounded-full">Register</button>
+            <div class="hidden md:flex items-center gap-3">
+                <button class="text-[13px] font-medium text-navy-500 hover:text-navy-900 transition-colors px-4 py-2">Sign In</button>
+                <button class="btn-blue text-[13px] font-semibold px-5 py-2.5 rounded-full">Register</button>
             </div>
             <button id="mobileToggle" class="md:hidden p-2 text-navy-900" aria-label="Menu">
                 <span class="iconify" data-icon="lucide:menu" data-width="22"></span>
             </button>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu md:hidden overflow-hidden max-h-0 opacity-0 bg-white/95 nav-blur">
             <div class="px-6 py-6 flex flex-col gap-4 border-t border-navy-100">
-                <a href="#features" class="text-base font-medium text-navy-700 py-2">Features</a>
-                <a href="#pricing" class="text-base font-medium text-navy-700 py-2">Pricing</a>
-                <a href="#about" class="text-base font-medium text-navy-700 py-2">About</a>
-                <a href="#contact" class="text-base font-medium text-navy-700 py-2">Contact</a>
+                <a href="#features" class="text-[15px] font-medium text-navy-700 py-2">Features</a>
+                <a href="#pricing" class="text-[15px] font-medium text-navy-700 py-2">Pricing</a>
+                <a href="#about" class="text-[15px] font-medium text-navy-700 py-2">About</a>
+                <a href="#contact" class="text-[15px] font-medium text-navy-700 py-2">Contact</a>
                 <hr class="border-navy-100">
-                <button class="text-base font-medium text-navy-700 py-2 text-left">Sign In</button>
-                <button class="btn-primary text-base font-semibold text-white px-5 py-3 rounded-full w-full">Register</button>
+                <button class="text-[15px] font-medium text-navy-700 py-2 text-left">Sign In</button>
+                <button class="btn-blue text-[15px] font-semibold px-5 py-3 rounded-full w-full">Register</button>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex flex-col items-center justify-center hero-glow pt-16">
-        <div class="max-w-[900px] mx-auto px-6 text-center py-24 md:py-32">
-            <div class="reveal visible delay-1">
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-50 text-navy-600 text-xs font-semibold uppercase tracking-widest mb-8">
-                    <span class="iconify text-accent" data-icon="lucide:sparkles" data-width="14"></span>
+    <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <!-- Decorative orbs -->
+        <div class="orb orb-1 w-[500px] h-[500px] -top-40 -right-40 opacity-[0.07]" style="background: rgb(29, 78, 216);"></div>
+        <div class="orb orb-2 w-[400px] h-[400px] bottom-20 -left-32 opacity-[0.05]" style="background: rgb(29, 78, 216);"></div>
+        <!-- Subtle grid -->
+        <div class="absolute inset-0 opacity-[0.025]" style="background-image: linear-gradient(rgb(29, 78, 216) 1px, transparent 1px), linear-gradient(90deg, rgb(29, 78, 216) 1px, transparent 1px); background-size: 80px 80px;"></div>
+
+        <div class="relative max-w-[900px] mx-auto px-6 text-center pt-28 pb-20 md:pt-36 md:pb-28">
+            <div class="reveal visible d1">
+                <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.15em] mb-8" style="background: rgba(29, 78, 216, 0.06); color: rgb(29, 78, 216);">
+                    <span class="iconify" data-icon="lucide:sparkles" data-width="13"></span>
                     Best Accounting Software
                 </span>
             </div>
-
-            <h1 class="hero-heading reveal visible delay-2 font-display font-800 text-[3.5rem] md:text-[5rem] lg:text-[6rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-8">
-                Best Accounting<br>
-                Software For<br>
-                <span class="gradient-text">Small Business</span>
+            <h1 class="hero-heading reveal visible d2 font-display font-800 text-[3.5rem] md:text-[5rem] lg:text-[6rem] leading-[0.92] tracking-[-0.035em] text-navy-900 mb-7">
+                Best Accounting<br>Software For<br><span class="gradient-text">Small Business</span>
             </h1>
-
-            <p class="reveal visible delay-3 text-lg md:text-xl text-navy-500 max-w-[620px] mx-auto leading-relaxed mb-12 font-medium">
+            <p class="reveal visible d3 text-[17px] md:text-[19px] text-navy-400 max-w-[600px] mx-auto leading-[1.7] mb-12 font-normal">
                 Streamline your financial operations with user-friendly tools, real-time insights, tax report generation, multi-currency support and many more.
             </p>
-
-            <div class="reveal visible delay-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button class="btn-primary text-white font-semibold text-base px-8 py-4 rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
+            <div class="reveal visible d4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button class="btn-blue font-semibold text-[15px] px-8 py-[14px] rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
                     Start Free Trial
-                    <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                    <span class="iconify" data-icon="lucide:arrow-right" data-width="17"></span>
                 </button>
-                <button class="btn-secondary text-navy-700 font-semibold text-base px-8 py-4 rounded-full border border-navy-200 flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                <button class="btn-blue-outline font-semibold text-[15px] px-8 py-[14px] rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
                     View Pricing
                 </button>
             </div>
-
-            <div class="reveal visible delay-5 flex flex-wrap items-center justify-center gap-6 mt-10 text-xs font-medium text-navy-400">
+            <div class="reveal visible d5 flex flex-wrap items-center justify-center gap-6 mt-10 text-[12px] font-medium text-navy-400">
                 <span class="flex items-center gap-1.5">
-                    <span class="iconify text-green-500" data-icon="lucide:check-circle" data-width="14"></span>
+                    <span class="iconify text-emerald-500" data-icon="lucide:check-circle" data-width="14"></span>
                     No Credit Card Needed
                 </span>
                 <span class="flex items-center gap-1.5">
-                    <span class="iconify text-green-500" data-icon="lucide:check-circle" data-width="14"></span>
+                    <span class="iconify text-emerald-500" data-icon="lucide:check-circle" data-width="14"></span>
                     30 Days Free Trial
                 </span>
             </div>
         </div>
-
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator">
-            <span class="iconify text-navy-300" data-icon="lucide:chevron-down" data-width="24"></span>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
+            <span class="iconify text-navy-300" data-icon="lucide:chevron-down" data-width="22"></span>
         </div>
     </section>
 
     <!-- Dashboard Preview -->
-    <section class="relative py-8 md:py-16 section-glow">
-        <div class="max-w-[1100px] mx-auto px-6">
-            <div class="reveal delay-1 dashboard-mockup rounded-2xl md:rounded-3xl overflow-hidden border border-navy-100/80 bg-navy-50/50" style="box-shadow: 0 40px 80px -20px rgba(11, 29, 58, 0.12), 0 0 0 1px rgba(11, 29, 58, 0.04);">
-                <!-- Browser Chrome -->
-                <div class="flex items-center gap-2 px-5 py-3.5 bg-white border-b border-navy-100/60">
-                    <div class="flex gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-400/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
-                    </div>
-                    <div class="flex-1 flex justify-center">
-                        <div class="bg-navy-50 rounded-lg px-4 py-1.5 text-xs text-navy-400 font-medium flex items-center gap-2">
-                            <span class="iconify" data-icon="lucide:lock" data-width="11"></span>
-                            app.clacnez.com/dashboard
-                        </div>
-                    </div>
-                    <div class="w-16"></div>
+    <section class="relative py-16 md:py-28 overflow-hidden">
+        <div class="orb orb-2 w-[600px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.06]" style="background: rgb(29, 78, 216);"></div>
+        <div class="max-w-[1100px] mx-auto px-6 relative">
+            <div class="reveal-scale reveal visible d2 relative">
+                <div class="float-shadow absolute left-1/2 -translate-x-1/2 bottom-[-35px] w-[80%] h-[50px] rounded-[50%]"></div>
+                <div class="float-container relative rounded-2xl md:rounded-[20px] overflow-hidden dash-wrap" style="box-shadow: 0 60px 120px -25px rgba(29, 78, 216, 0.2), 0 30px 60px -15px rgba(11, 29, 58, 0.1), 0 0 0 1px rgba(29, 78, 216, 0.05);">
+                    <img
+                        src="https://z-cdn-media.chatglm.cn/files/a4083351-7dc5-4e70-bbf8-ef9760422274.png?auth_key=1877237113-45611cf5dd3146c5835ff404dccce78c-0-a6715bf2038e19f800c610c737428cb4"
+                        alt="Clacnez Dashboard Overview"
+                        class="w-full h-auto block"
+                    />
                 </div>
-                <!-- Dashboard Content -->
-                <div class="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 p-6 md:p-10">
-                    <div class="flex items-center justify-between mb-8">
-                        <div>
-                            <p class="text-navy-400 text-xs font-medium uppercase tracking-widest mb-1">Dashboard Overview</p>
-                            <p class="text-white font-display font-700 text-xl md:text-2xl">Welcome back, Sarah</p>
-                        </div>
-                        <div class="hidden md:flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
-                            <span class="iconify text-white/60" data-icon="lucide:search" data-width="14"></span>
-                            <span class="text-white/40 text-xs">Search anything...</span>
-                        </div>
-                    </div>
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
-                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                                    <span class="iconify text-blue-400" data-icon="lucide:dollar-sign" data-width="16"></span>
-                                </div>
-                            </div>
-                            <p class="text-white/50 text-xs font-medium mb-1">Total Revenue</p>
-                            <p class="text-white font-display font-700 text-lg md:text-xl">$284,320</p>
-                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 12.5%</p>
-                        </div>
-                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                                    <span class="iconify text-purple-400" data-icon="lucide:receipt" data-width="16"></span>
-                                </div>
-                            </div>
-                            <p class="text-white/50 text-xs font-medium mb-1">Invoices</p>
-                            <p class="text-white font-display font-700 text-lg md:text-xl">1,284</p>
-                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 8.2%</p>
-                        </div>
-                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                                    <span class="iconify text-amber-400" data-icon="lucide:users" data-width="16"></span>
-                                </div>
-                            </div>
-                            <p class="text-white/50 text-xs font-medium mb-1">Clients</p>
-                            <p class="text-white font-display font-700 text-lg md:text-xl">386</p>
-                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 4.1%</p>
-                        </div>
-                        <div class="bg-white/[0.07] backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/[0.06]">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                                    <span class="iconify text-emerald-400" data-icon="lucide:trending-up" data-width="16"></span>
-                                </div>
-                            </div>
-                            <p class="text-white/50 text-xs font-medium mb-1">Net Profit</p>
-                            <p class="text-white font-display font-700 text-lg md:text-xl">$92,450</p>
-                            <p class="text-green-400 text-xs mt-1 font-medium">↑ 18.3%</p>
-                        </div>
-                    </div>
-                    <!-- Chart Area -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-2 bg-white/[0.05] backdrop-blur-sm rounded-xl p-5 border border-white/[0.06]">
-                            <div class="flex items-center justify-between mb-6">
-                                <p class="text-white font-display font-600 text-sm">Revenue Overview</p>
-                                <div class="flex gap-2">
-                                    <span class="text-xs text-white/40 bg-white/[0.07] px-3 py-1 rounded-full">Monthly</span>
-                                    <span class="text-xs text-white bg-white/[0.15] px-3 py-1 rounded-full">Yearly</span>
-                                </div>
-                            </div>
-                            <!-- SVG Chart -->
-                            <svg viewBox="0 0 500 120" class="w-full" fill="none">
-                                <defs>
-                                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.3"/>
-                                        <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
-                                    </linearGradient>
-                                </defs>
-                                <path d="M0,100 Q30,95 60,85 T120,70 T180,55 T240,65 T300,40 T360,30 T420,25 T480,15 L500,12 L500,120 L0,120Z" fill="url(#chartGrad)"/>
-                                <path d="M0,100 Q30,95 60,85 T120,70 T180,55 T240,65 T300,40 T360,30 T420,25 T480,15 L500,12" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round"/>
-                                <circle cx="500" cy="12" r="4" fill="#3B82F6"/>
-                                <circle cx="500" cy="12" r="8" fill="#3B82F6" opacity="0.2"/>
-                            </svg>
-                            <div class="flex justify-between mt-3 text-[10px] text-white/30">
-                                <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
-                            </div>
-                        </div>
-                        <div class="bg-white/[0.05] backdrop-blur-sm rounded-xl p-5 border border-white/[0.06]">
-                            <p class="text-white font-display font-600 text-sm mb-5">Recent Transactions</p>
-                            <div class="space-y-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                                        <span class="iconify text-blue-400" data-icon="lucide:arrow-down-left" data-width="13"></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-white text-xs font-medium truncate">Payment from Acme Co.</p>
-                                        <p class="text-white/40 text-[10px]">2 hours ago</p>
-                                    </div>
-                                    <p class="text-green-400 text-xs font-semibold">+$4,200</p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                                        <span class="iconify text-red-400" data-icon="lucide:arrow-up-right" data-width="13"></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-white text-xs font-medium truncate">AWS Subscription</p>
-                                        <p class="text-white/40 text-[10px]">5 hours ago</p>
-                                    </div>
-                                    <p class="text-red-400 text-xs font-semibold">-$1,240</p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                                        <span class="iconify text-blue-400" data-icon="lucide:arrow-down-left" data-width="13"></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-white text-xs font-medium truncate">Invoice #1284</p>
-                                        <p class="text-white/40 text-[10px]">Yesterday</p>
-                                    </div>
-                                    <p class="text-green-400 text-xs font-semibold">+$8,750</p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                                        <span class="iconify text-red-400" data-icon="lucide:arrow-up-right" data-width="13"></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-white text-xs font-medium truncate">Office Rent</p>
-                                        <p class="text-white/40 text-[10px]">3 days ago</p>
-                                    </div>
-                                    <p class="text-red-400 text-xs font-semibold">-$3,500</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="relative py-16 md:py-20 border-y border-navy-100/60 bg-navy-50/30">
+        <div class="max-w-[1000px] mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
+                <div class="stat-item text-center px-4 reveal d1">
+                    <p class="font-display font-800 text-3xl md:text-4xl tracking-tight text-navy-900 mb-1" style="color: rgb(29, 78, 216);">10K+</p>
+                    <p class="text-navy-400 text-[13px] font-medium">Active Users</p>
+                </div>
+                <div class="stat-item text-center px-4 reveal d2">
+                    <p class="font-display font-800 text-3xl md:text-4xl tracking-tight text-navy-900 mb-1">99.9%</p>
+                    <p class="text-navy-400 text-[13px] font-medium">Uptime</p>
+                </div>
+                <div class="stat-item text-center px-4 reveal d3">
+                    <p class="font-display font-800 text-3xl md:text-4xl tracking-tight text-navy-900 mb-1">50+</p>
+                    <p class="text-navy-400 text-[13px] font-medium">Countries</p>
+                </div>
+                <div class="stat-item text-center px-4 reveal d4">
+                    <p class="font-display font-800 text-3xl md:text-4xl tracking-tight text-navy-900 mb-1">4.9★</p>
+                    <p class="text-navy-400 text-[13px] font-medium">User Rating</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-24 md:py-36 bg-white">
-        <div class="max-w-[1200px] mx-auto px-6">
+    <section id="features" class="py-24 md:py-36 bg-white relative overflow-hidden">
+        <div class="orb orb-1 w-[400px] h-[400px] -top-20 right-0 opacity-[0.04]" style="background: rgb(29, 78, 216);"></div>
+        <div class="max-w-[1200px] mx-auto px-6 relative">
             <div class="text-center mb-16 md:mb-20">
-                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Features</span>
-                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                <span class="reveal text-[11px] font-semibold uppercase tracking-[0.15em] mb-4 block" style="color: rgb(29, 78, 216);">Features</span>
+                <h2 class="reveal d1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.92] tracking-[-0.035em] text-navy-900 mb-6">
                     What Clacnez Offers<br><span class="gradient-text">to You.</span>
                 </h2>
-                <p class="reveal delay-2 text-navy-500 text-lg max-w-[520px] mx-auto">
+                <p class="reveal d2 text-navy-400 text-[17px] max-w-[500px] mx-auto leading-relaxed">
                     Powerful tools designed to simplify every aspect of your financial management.
                 </p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Feature 1 -->
-                <div class="reveal delay-1 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:globe" data-width="22"></span>
+                <div class="reveal d1 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:globe" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Multi Currency</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Manage and track transactions in multiple currencies with real-time exchange rates and automatic conversion.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">Multi Currency</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Manage and track transactions in multiple currencies with real-time exchange rates and automatic conversion.</p>
                 </div>
-                <!-- Feature 2 -->
-                <div class="reveal delay-2 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:bot" data-width="22"></span>
+                <div class="reveal d2 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:bot" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">AI Assistant</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Chat with our intelligent assistant for real-time financial insights, reports, and answers to your queries.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">AI Assistant</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Chat with our intelligent assistant for real-time financial insights, reports, and answers to your queries.</p>
                 </div>
-                <!-- Feature 3 -->
-                <div class="reveal delay-3 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:bar-chart-3" data-width="22"></span>
+                <div class="reveal d3 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:bar-chart-3" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Real-time Analytics</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Get instant access to financial metrics, trends, and customizable reports for better decision-making.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">Real-time Analytics</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Get instant access to financial metrics, trends, and customizable reports for better decision-making.</p>
                 </div>
-                <!-- Feature 4 -->
-                <div class="reveal delay-1 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:wallet" data-width="22"></span>
+                <div class="reveal d4 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:wallet" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Expense Tracking</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Get a clear picture of your spending habits and make smart financial decisions with comprehensive tracking.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">Expense Tracking</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Get a clear picture of your spending habits and make smart financial decisions with comprehensive tracking.</p>
                 </div>
-                <!-- Feature 5 -->
-                <div class="reveal delay-2 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:file-text" data-width="22"></span>
+                <div class="reveal d5 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:file-text" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Automated Reporting</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Generate comprehensive financial reports automatically, compliant with global reporting standards.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">Automated Reporting</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Generate comprehensive financial reports automatically, compliant with global reporting standards.</p>
                 </div>
-                <!-- Feature 6 -->
-                <div class="reveal delay-3 card-hover bg-white border border-navy-100/80 rounded-2xl p-7 md:p-8">
-                    <div class="feature-icon-wrap w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-5">
-                        <span class="iconify text-navy-700" data-icon="lucide:landmark" data-width="22"></span>
+                <div class="reveal d6 feature-card p-7 md:p-8">
+                    <div class="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:landmark" data-width="21" style="color: rgb(29, 78, 216);"></span>
                     </div>
-                    <h3 class="font-display font-700 text-lg text-navy-900 mb-3">Tax Filing</h3>
-                    <p class="text-navy-500 text-sm leading-relaxed">Simplify tax preparation and filing with automated calculations and compliance with local tax regulations.</p>
+                    <h3 class="font-display font-700 text-[17px] text-navy-900 mb-2.5">Tax Filing</h3>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">Simplify tax preparation and filing with automated calculations and compliance with local tax regulations.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="py-24 md:py-36 bg-navy-50/40">
-        <div class="max-w-[1200px] mx-auto px-6">
+    <section id="pricing" class="py-24 md:py-36 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAFC 0%, #EFF3F8 100%);">
+        <div class="orb orb-2 w-[500px] h-[500px] top-0 left-1/2 -translate-x-1/2 opacity-[0.05]" style="background: rgb(29, 78, 216);"></div>
+        <div class="max-w-[1200px] mx-auto px-6 relative">
             <div class="text-center mb-16 md:mb-20">
-                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Pricing</span>
-                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                <span class="reveal text-[11px] font-semibold uppercase tracking-[0.15em] mb-4 block" style="color: rgb(29, 78, 216);">Pricing</span>
+                <h2 class="reveal d1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.92] tracking-[-0.035em] text-navy-900 mb-6">
                     Simplify Your Accounting<br><span class="gradient-text">with Clacnez</span>
                 </h2>
-                <p class="reveal delay-2 text-navy-500 text-lg max-w-[480px] mx-auto">
+                <p class="reveal d2 text-navy-400 text-[17px] max-w-[460px] mx-auto leading-relaxed">
                     Everything you need. Nothing you don't.
                 </p>
             </div>
-
-            <div class="reveal delay-2 max-w-[480px] mx-auto">
-                <div class="pricing-card-highlight rounded-3xl border border-navy-100/80 bg-white p-8 md:p-12 text-center relative overflow-hidden" style="box-shadow: 0 30px 60px -15px rgba(11, 29, 58, 0.1);">
-                    <!-- Badge -->
+            <div class="reveal d2 max-w-[460px] mx-auto relative">
+                <div class="pricing-glow absolute -inset-4 rounded-[36px] opacity-30"></div>
+                <div class="pricing-card p-8 md:p-12 text-center relative" style="box-shadow: 0 30px 60px -15px rgba(29, 78, 216, 0.12), 0 8px 24px -8px rgba(0,0,0,0.04);">
                     <div class="absolute top-6 right-6">
-                        <span class="inline-flex items-center gap-1 bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.12em] px-3 py-1.5 rounded-full" style="background: rgba(29, 78, 216, 0.07); color: rgb(29, 78, 216);">
                             <span class="iconify" data-icon="lucide:zap" data-width="11"></span>
                             Best Value
                         </span>
                     </div>
-
-                    <p class="text-navy-500 text-sm font-semibold uppercase tracking-widest mb-2">Only For</p>
+                    <p class="text-navy-400 text-[12px] font-semibold uppercase tracking-[0.15em] mb-3">Only For</p>
                     <div class="flex items-baseline justify-center gap-1 mb-2">
-                        <span class="text-navy-400 text-2xl font-display font-600">SGD</span>
-                        <span class="font-display font-900 text-[5rem] md:text-[6.5rem] leading-none tracking-tighter text-navy-900">19</span>
+                        <span class="text-navy-400 text-xl font-display font-600">SGD</span>
+                        <span class="font-display font-900 text-[5.5rem] md:text-[6.5rem] leading-none tracking-[-0.04em] text-navy-900">19</span>
                         <span class="text-navy-400 text-lg font-medium">/month</span>
                     </div>
-                    <p class="text-navy-400 text-sm mb-8">Billed monthly. Cancel anytime.</p>
-
-                    <button class="btn-primary w-full text-white font-semibold text-base px-8 py-4 rounded-full flex items-center justify-center gap-2.5 mb-6">
+                    <p class="text-navy-300 text-[13px] mb-9">Billed monthly. Cancel anytime.</p>
+                    <button class="btn-blue w-full font-semibold text-[15px] px-8 py-[15px] rounded-full flex items-center justify-center gap-2.5 mb-8">
                         Try It Now
-                        <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                        <span class="iconify" data-icon="lucide:arrow-right" data-width="17"></span>
                     </button>
-
-                    <div class="space-y-3 text-left">
-                        <div class="flex items-center gap-3 text-sm text-navy-600">
-                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                    <div class="space-y-3.5 text-left">
+                        <div class="flex items-center gap-3 text-[14px] text-navy-500">
+                            <span class="iconify flex-shrink-0" data-icon="lucide:check" data-width="16" style="color: rgb(29, 78, 216);"></span>
                             All 6 core features included
                         </div>
-                        <div class="flex items-center gap-3 text-sm text-navy-600">
-                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                        <div class="flex items-center gap-3 text-[14px] text-navy-500">
+                            <span class="iconify flex-shrink-0" data-icon="lucide:check" data-width="16" style="color: rgb(29, 78, 216);"></span>
                             Unlimited transactions
                         </div>
-                        <div class="flex items-center gap-3 text-sm text-navy-600">
-                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                        <div class="flex items-center gap-3 text-[14px] text-navy-500">
+                            <span class="iconify flex-shrink-0" data-icon="lucide:check" data-width="16" style="color: rgb(29, 78, 216);"></span>
                             Multi-currency support
                         </div>
-                        <div class="flex items-center gap-3 text-sm text-navy-600">
-                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                        <div class="flex items-center gap-3 text-[14px] text-navy-500">
+                            <span class="iconify flex-shrink-0" data-icon="lucide:check" data-width="16" style="color: rgb(29, 78, 216);"></span>
                             AI-powered insights
                         </div>
-                        <div class="flex items-center gap-3 text-sm text-navy-600">
-                            <span class="iconify text-green-500 flex-shrink-0" data-icon="lucide:check" data-width="16"></span>
+                        <div class="flex items-center gap-3 text-[14px] text-navy-500">
+                            <span class="iconify flex-shrink-0" data-icon="lucide:check" data-width="16" style="color: rgb(29, 78, 216);"></span>
                             Priority customer support
                         </div>
                     </div>
@@ -580,109 +570,108 @@
     </section>
 
     <!-- Why Choose Section -->
-    <section id="about" class="py-24 md:py-36 bg-white">
-        <div class="max-w-[1200px] mx-auto px-6">
+    <section id="about" class="py-24 md:py-36 bg-white relative overflow-hidden">
+        <div class="orb orb-1 w-[400px] h-[400px] bottom-0 right-0 opacity-[0.04]" style="background: rgb(29, 78, 216);"></div>
+        <div class="max-w-[1200px] mx-auto px-6 relative">
             <div class="text-center mb-16 md:mb-20">
-                <span class="reveal text-xs font-semibold uppercase tracking-widest text-accent mb-4 block">Why Clacnez</span>
-                <h2 class="reveal delay-1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-navy-900 mb-6">
+                <span class="reveal text-[11px] font-semibold uppercase tracking-[0.15em] mb-4 block" style="color: rgb(29, 78, 216);">Why Clacnez</span>
+                <h2 class="reveal d1 font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.92] tracking-[-0.035em] text-navy-900 mb-6">
                     Why Choose<br><span class="gradient-text">Clacnez?</span>
                 </h2>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
-                <!-- Why Card 1 -->
-                <div class="reveal delay-1 why-card card-hover bg-white border border-navy-100/80 rounded-2xl p-8 md:p-10">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/10 to-blue-500/5 flex items-center justify-center mb-6">
-                        <span class="iconify text-accent" data-icon="lucide:mouse-pointer-click" data-width="24"></span>
+                <div class="reveal d1 why-card p-9 md:p-11">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(29, 78, 216, 0.07);">
+                        <span class="iconify" data-icon="lucide:mouse-pointer-click" data-width="24" style="color: rgb(29, 78, 216);"></span>
                     </div>
                     <h3 class="font-display font-700 text-xl text-navy-900 mb-4">Super User Friendly</h3>
-                    <p class="text-navy-500 text-[15px] leading-relaxed">Clacnez features a super user-friendly interface that's intuitive and easy to use, with clear visualisations, one-click actions, and guided tutorials to help you get started quickly.</p>
+                    <p class="text-navy-400 text-[15px] leading-[1.75]">Clacnez features a super user-friendly interface that's intuitive and easy to use, with clear visualisations, one-click actions, and guided tutorials to help you get started quickly.</p>
                 </div>
-                <!-- Why Card 2 -->
-                <div class="reveal delay-2 why-card card-hover bg-white border border-navy-100/80 rounded-2xl p-8 md:p-10">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-green-500/5 flex items-center justify-center mb-6">
+                <div class="reveal d2 why-card p-9 md:p-11">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6">
                         <span class="iconify text-emerald-500" data-icon="lucide:badge-dollar-sign" data-width="24"></span>
                     </div>
                     <h3 class="font-display font-700 text-xl text-navy-900 mb-4">Unbeatable Price</h3>
-                    <p class="text-navy-500 text-[15px] leading-relaxed">Clacnez offers unbeatable value for money with flexible pricing plans designed to fit small and medium businesses, ensuring you get the best financial management tools without breaking the bank.</p>
+                    <p class="text-navy-400 text-[15px] leading-[1.75]">Clacnez offers unbeatable value for money with flexible pricing plans designed to fit small and medium businesses, ensuring you get the best financial management tools without breaking the bank.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-24 md:py-36 relative overflow-hidden">
-        <div class="absolute inset-0 bg-navy-900"></div>
-        <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 70%);"></div>
-        <!-- Grid pattern -->
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <section class="py-24 md:py-36 relative overflow-hidden" style="background: rgb(29, 78, 216);">
+        <!-- Decorative elements -->
+        <div class="absolute top-0 left-0 w-full h-full" style="background: radial-gradient(ellipse 100% 80% at 20% 30%, rgba(255,255,255,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 70%, rgba(255,255,255,0.04) 0%, transparent 50%);"></div>
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 32px 32px;"></div>
+        <!-- Floating circles -->
+        <div class="absolute top-12 right-16 w-3 h-3 rounded-full bg-white/10 orb-1"></div>
+        <div class="absolute bottom-20 left-20 w-2 h-2 rounded-full bg-white/15 orb-2"></div>
+        <div class="absolute top-1/2 right-1/4 w-4 h-4 rounded-full bg-white/[0.06] orb-1"></div>
 
         <div class="relative max-w-[800px] mx-auto px-6 text-center">
-            <h2 class="reveal font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.95] tracking-[-0.03em] text-white mb-6">
+            <h2 class="reveal font-display font-800 text-[2.5rem] md:text-[4rem] leading-[0.92] tracking-[-0.035em] text-white mb-6">
                 Ready to Transform<br>Your Financial Management?
             </h2>
-            <p class="reveal delay-1 text-navy-300 text-lg md:text-xl max-w-[520px] mx-auto mb-10 leading-relaxed">
+            <p class="reveal d1 text-white/65 text-[17px] md:text-[19px] max-w-[500px] mx-auto mb-11 leading-[1.7]">
                 Join leading global businesses using Clacnez to streamline their finances.
             </p>
-            <div class="reveal delay-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button class="bg-white text-navy-900 font-semibold text-base px-8 py-4 rounded-full flex items-center gap-2.5 transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_-8px_rgba(255,255,255,0.2)] w-full sm:w-auto justify-center">
+            <div class="reveal d2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button class="btn-white font-semibold text-[15px] px-8 py-[14px] rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
                     View Pricing Plans
-                    <span class="iconify" data-icon="lucide:arrow-right" data-width="18"></span>
+                    <span class="iconify" data-icon="lucide:arrow-right" data-width="17"></span>
                 </button>
-                <button class="text-white/80 font-semibold text-base px-8 py-4 rounded-full border border-white/20 flex items-center gap-2.5 transition-all duration-300 hover:bg-white/10 hover:scale-105 w-full sm:w-auto justify-center">
+                <button class="btn-white-ghost font-semibold text-[15px] px-8 py-[14px] rounded-full flex items-center gap-2.5 w-full sm:w-auto justify-center">
                     Start Free Trial
+                    <span class="iconify" data-icon="lucide:arrow-right" data-width="17"></span>
                 </button>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-navy-950 text-white py-16 md:py-20">
-        <div class="max-w-[1200px] mx-auto px-6">
+    <footer id="contact" class="bg-navy-950 text-white py-16 md:py-20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 28px 28px;"></div>
+        <div class="max-w-[1200px] mx-auto px-6 relative">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-16">
-                <!-- Brand -->
                 <div class="col-span-2 md:col-span-1">
                     <a href="#" class="font-display font-800 text-xl tracking-tight text-white inline-block mb-4">
-                        Clacnez<span class="text-accent">.</span>
+                        Clacnez<span style="color: rgb(29, 78, 216);">.</span>
                     </a>
-                    <p class="text-navy-400 text-sm leading-relaxed">User-friendly cloud-based accounting software for modern businesses.</p>
+                    <p class="text-navy-400 text-[14px] leading-[1.7]">User-friendly cloud-based accounting software for modern businesses.</p>
                 </div>
-                <!-- Product -->
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Product</p>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-navy-500 mb-5">Product</p>
                     <ul class="space-y-3">
-                        <li><a href="#features" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Features</a></li>
-                        <li><a href="#pricing" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Pricing</a></li>
+                        <li><a href="#features" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">Features</a></li>
+                        <li><a href="#pricing" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">Pricing</a></li>
                     </ul>
                 </div>
-                <!-- Company -->
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Company</p>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-navy-500 mb-5">Company</p>
                     <ul class="space-y-3">
-                        <li><a href="#about" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">About</a></li>
-                        <li><a href="#contact" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Contact</a></li>
+                        <li><a href="#about" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">About</a></li>
+                        <li><a href="#contact" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">Contact</a></li>
                     </ul>
                 </div>
-                <!-- Legal -->
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-widest text-navy-500 mb-5">Legal</p>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-navy-500 mb-5">Legal</p>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
-                        <li><a href="#" class="text-sm text-navy-300 hover:text-white transition-colors duration-200">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+                        <li><a href="#" class="text-[14px] text-navy-400 hover:text-white transition-colors duration-200">Terms & Conditions</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                <p class="text-navy-500 text-xs">© 2025 Clacnez. All rights reserved.</p>
-                <div class="flex items-center gap-4">
-                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
-                        <span class="iconify" data-icon="lucide:twitter" data-width="18"></span>
+                <p class="text-navy-500 text-[12px]">© 2025 Clacnez. All rights reserved.</p>
+                <div class="flex items-center gap-5">
+                    <a href="#" class="text-navy-500 hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                        <span class="iconify" data-icon="lucide:twitter" data-width="17"></span>
                     </a>
-                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
-                        <span class="iconify" data-icon="lucide:linkedin" data-width="18"></span>
+                    <a href="#" class="text-navy-500 hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                        <span class="iconify" data-icon="lucide:linkedin" data-width="17"></span>
                     </a>
-                    <a href="#" class="text-navy-500 hover:text-white transition-colors duration-200">
-                        <span class="iconify" data-icon="lucide:instagram" data-width="18"></span>
+                    <a href="#" class="text-navy-500 hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                        <span class="iconify" data-icon="lucide:instagram" data-width="17"></span>
                     </a>
                 </div>
             </div>
@@ -690,8 +679,7 @@
     </footer>
 
     <script>
-        // Intersection Observer for scroll animations
-        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -60px 0px' };
+        // Scroll reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -699,15 +687,22 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        // Spotlight effect on feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+                card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+            });
+        });
 
-        // Mobile menu toggle
+        // Mobile menu
         const mobileToggle = document.getElementById('mobileToggle');
         const mobileMenu = document.getElementById('mobileMenu');
         let menuOpen = false;
-
         mobileToggle.addEventListener('click', () => {
             menuOpen = !menuOpen;
             if (menuOpen) {
@@ -720,8 +715,6 @@
                 mobileToggle.innerHTML = '<span class="iconify" data-icon="lucide:menu" data-width="22"></span>';
             }
         });
-
-        // Close mobile menu on link click
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 menuOpen = false;
@@ -731,24 +724,18 @@
             });
         });
 
-        // Navbar background on scroll
+        // Navbar shadow
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                navbar.classList.add('shadow-sm');
-            } else {
-                navbar.classList.remove('shadow-sm');
-            }
+            navbar.classList.toggle('shadow-sm', window.scrollY > 20);
         });
 
-        // Smooth scroll for anchor links
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
     </script>
